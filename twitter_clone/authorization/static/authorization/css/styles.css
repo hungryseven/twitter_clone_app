@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-text {
+    font-size: 66px;
+    font-weight: 900;
+}
+
+.sub-text {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.register-btn {
+    background-color: rgb(29,161,242);
+    border-color: rgb(29,161,242);
+}
+
+.login-btn {
+    color: rgb(29,161,242);
+}
+
+.login-btn:hover {
+    color: rgb(29,161,242);
+    background-color: rgb(231, 242, 243);
+}
+
+.nav-link.link:hover {
+    text-decoration: underline;
+}
