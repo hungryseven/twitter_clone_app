@@ -1,18 +1,31 @@
 from django.db import models
-from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
+from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.contrib.postgres.fields import CICharField, CIEmailField
 
 # Create your models here.
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     '''
-        Класс, представляющий кастомную модель пользователя.
-        Для аутентификации используется username.
+        Класс, представляющий кастомную модель пользователя. Для аутентификации по умолчанию используется username.
+        Кастомный бекэнд (./auth_backend.py) предоставляет кастомную аутентификацию как по username, так и по email. 
+        Для полей с ограничением "unique" используются поля с типом "citext", которые не чувствительны к регистру.
+        Следовательно, значения для юзернеймов test, TEST, tEsT и т.д. эквиваленты друг другу.
     '''
 
-    username = models.CharField(max_length=15, unique=True, verbose_name='Username')
-    email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
+    username = CICharField(
+        max_length=15,
+        unique=True,
+        error_messages={'unique': 'Данное имя уже занято. Пожалуйста, выберите другое.'},
+        verbose_name='Username'
+    )
+    email = CIEmailField(
+        max_length=255,
+        unique=True,
+        error_messages={'unique': 'Адрес электронной почты уже занят.'},
+        verbose_name='Email'
+    )
     profile_name = models.CharField(max_length=50, blank=True, verbose_name='Имя профиля')
     about = models.CharField(max_length=160, blank=True, verbose_name='О себе')
     location = models.CharField(max_length=30, blank=True, verbose_name='Местоположение')
@@ -43,11 +56,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         '''Отправляет email текущему пользователю'''
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-
 class FooterLinks(models.Model):    
     '''Класс FooterLinks предоставляет ссылки на оригинальную документацию и доп. сервисы твиттера в футере'''
 
-    title = models.CharField(max_length=50, unique=True, verbose_name='Заголовок')
+    title = CICharField(max_length=50, unique=True, db_index=False, verbose_name='Заголовок')
     url = models.URLField(unique=True, verbose_name='URL')
 
     def __str__(self):

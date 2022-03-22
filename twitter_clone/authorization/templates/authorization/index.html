@@ -19,9 +19,9 @@
             </div>
             <p class="main-text mb-4">В курсе</br> происходящего</p>
             <p class="sub-text mb-4">Присоединяйтесь к Твиттеру прямо сейчас!</p>
-            <a href="#" type="button" class="register-btn col-6 col-sm-6 col-md-6 col-lg-6 col-xl-4 fw-bold btn btn-primary rounded-pill mb-5">Зарегистрироваться</a>
+            <a href="{% url 'authorization:register' %}" type="button" class="to-register-btn col-12 col-sm-8 col-md-8 col-lg-8 col-xl-5 fw-bold btn btn-primary rounded-pill mb-5">Зарегистрироваться</a>
             <p class="fw-bold">Уже зарегистрированы?</p>
-            <a href="#" type="button" class="login-btn col-6 col-sm-6 col-md-6 col-lg-6 col-xl-4 fw-bold btn btn btn-light rounded-pill border border-secondary">Войти</a>
+            <a href="{% url 'authorization:login' %}" type="button" class="to-login-btn col-12 col-sm-8 col-md-8 col-lg-8 col-xl-5 fw-bold btn btn-light rounded-pill border border-secondary">Войти</a>
         </div>
     </div>
 </div>

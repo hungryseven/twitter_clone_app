@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_static %}
+<link type="text/css" href="{% static 'authorization/css/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="login-container cover-container">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="register-form px-5 col-12 col-md-8 col-lg-6 col-xl-4">
+                <a href="{% url 'authorization:index' %}" class="back-to-index"><i class="bi bi-x" style="font-size: 2rem;"></i></a>
+                <div class="twitter-logo text-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgb(29,161,242)" class="bi bi-twitter" viewBox="0 0 16 16">
+                        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
+                    </svg>
+                </div>
+                <p class="mb-4 fw-bold fs-4">Вход в Твиттер</p>
+                <form action="" method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" class="btn btn-dark fw-bold rounded-pill col-12 my-4" value="Войти">
+                </form>
+                <a href="#" class="to-pswd-reset-btn fw-bold btn btn-light rounded-pill border border-secondary col-12 mb-5">Забыли пароль?</a>
+                <p class="text-muted">
+                    Нет учетной записи?
+                    <a href="{% url 'authorization:register' %}" class="go-to-register text-decoration-none">Зарегистрируйтесь</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
