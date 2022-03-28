@@ -2,42 +2,44 @@
 {% load static %}
 
 {% block extra_static %}
-<link type="text/css" href="{% static 'authorization/css/styles.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'authorization/css/styles.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block content %}
-<div class="content-container cover-container">
-    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2">
-        <div class="col-12 col-md-7 inline-block">
-            <img src="{% static 'authorization/images/index_image.png' %}" class="img-fluid">
-        </div>
-        <div class="col-12 col-md-5 px-4">
-            <div class="twitter-logo py-5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="rgb(29,161,242)" class="bi bi-twitter" viewBox="0 0 16 16">
-                    <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
-                </svg>
+{% block container %}
+    {% block content %}
+    <div class="content-container cover-container">
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2">
+            <div class="col-12 col-md-7 inline-block">
+                <img src="{% static 'authorization/images/index_image.png' %}" class="img-fluid">
             </div>
-            <p class="main-text mb-4">В курсе</br> происходящего</p>
-            <p class="sub-text mb-4">Присоединяйтесь к Твиттеру прямо сейчас!</p>
-            <a href="{% url 'authorization:register' %}" type="button" class="to-register-btn col-12 col-sm-8 col-md-8 col-lg-8 col-xl-5 fw-bold btn btn-primary rounded-pill mb-5">Зарегистрироваться</a>
-            <p class="fw-bold">Уже зарегистрированы?</p>
-            <a href="{% url 'authorization:login' %}" type="button" class="to-login-btn col-12 col-sm-8 col-md-8 col-lg-8 col-xl-5 fw-bold btn btn-light rounded-pill border border-secondary">Войти</a>
+            <div class="col-12 col-md-5 px-4">
+                <div class="twitter-logo py-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="rgb(29,161,242)" class="bi bi-twitter" viewBox="0 0 16 16">
+                        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
+                    </svg>
+                </div>
+                <p class="main-text mb-4">В курсе</br> происходящего</p>
+                <p class="sub-text mb-4">Присоединяйтесь к Твиттеру прямо сейчас!</p>
+                <a href="{% url 'authorization:register' %}" type="button" class="to-register-btn col-12 col-sm-8 col-md-8 col-lg-8 col-xl-5 fw-bold btn btn-primary rounded-pill mb-5">Зарегистрироваться</a>
+                <p class="fw-bold">Уже зарегистрированы?</p>
+                <a href="{% url 'authorization:login' %}" type="button" class="to-login-btn col-12 col-sm-8 col-md-8 col-lg-8 col-xl-5 fw-bold btn btn-light rounded-pill border border-secondary">Войти</a>
+            </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
-{% block footer %}
-    <div class="footer-container cover-container">
-        <ul class="nav justify-content-center mt-4">
-            {% for link in links %}
+    {% block footer %}
+        <div class="footer-container cover-container">
+            <ul class="nav justify-content-center mt-4">
+                {% for link in links %}
+                    <li class="nav-item">
+                        <a href="{{ link.url }}" class="nav-link link px-2 text-muted">{{ link.title }}</a>
+                    </li>
+                {% endfor %}
                 <li class="nav-item">
-                    <a href="{{ link.url }}" class="nav-link link px-2 text-muted">{{ link.title }}</a>
+                    <p class="nav-link px-2 text-muted">© Twitter, Inc., 2022.</p>
                 </li>
-            {% endfor %}
-            <li class="nav-item">
-                <p class="nav-link px-2 text-muted">© Twitter, Inc., 2022.</p>
-            </li>
-        </ul>
-    </div>
+            </ul>
+        </div>
+    {% endblock %}
 {% endblock %}

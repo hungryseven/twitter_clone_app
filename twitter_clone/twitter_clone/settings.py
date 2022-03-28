@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+from django.urls import reverse
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,6 +38,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'authorization.apps.AuthorizationConfig',
+    'main_app.apps.MainAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -144,3 +147,6 @@ AUTH_USER_MODEL = 'authorization.CustomUser'
 AUTHENTICATION_BACKENDS = [
     'authorization.auth_backend.CustomBackend',
 ]
+
+LOGIN_REDIRECT_URL = 'main_app:home'
+LOGOUT_REDIRECT_URL = 'authorization:index'

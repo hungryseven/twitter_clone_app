@@ -13,13 +13,18 @@
     border-color: rgb(29,161,242);
 }
 
+.to-register-btn:hover {
+    background-color: rgb(26, 144, 218);
+    border-color: rgb(26, 144, 218);
+}
+
 .to-login-btn {
     color: rgb(29,161,242);
 }
 
 .to-login-btn:hover {
     color: rgb(29,161,242);
-    background-color: rgb(231, 242, 243);
+    background-color: rgb(221, 228, 228);
 }
 
 .nav-link.link:hover {

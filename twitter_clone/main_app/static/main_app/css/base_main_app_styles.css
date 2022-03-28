@@ -1,0 +1,56 @@
+.nav-item:hover,
+#dropdownUser:hover {
+    background: rgb(221, 228, 228);
+}
+
+.nav-item-logo:hover {
+    background: rgb(220, 232, 233);
+}
+
+.make-tweet-btn {
+    background-color: rgb(29, 161, 242);
+    border-color: rgb(29, 161, 242);
+}
+
+.make-tweet-btn.circle {
+    border-radius: 25px;
+}
+
+.make-tweet-btn:hover {
+    background-color: rgb(26, 144, 218);
+    border-color: rgb(26, 144, 218);
+}
+
+.footer { 
+    background-color: rgb(29, 161, 242);
+}
+
+.to-login-btn {
+    color: white;
+}
+
+.to-login-btn:hover {
+    color: white;
+    background-color: rgb(67, 172, 238);
+}
+
+.to-register-btn:hover {
+    background-color: rgb(221, 228, 228);
+}
+
+/* 
+Задается div'y с кнопками в футере, чтобы они растягивались во всю ширину контейнера 
+на маленьких экранах (xs-md breakpoints)
+*/
+@media (min-width: 768px) {
+    .btn-group { display:inline-block; }
+}
+
+/* Задает ширину сайдбару с меню слева. 100px - на [xs-lg) breakpoints, 300px на [lg-xxl] breakpoints */
+@media (min-width: 992px) {
+    .w-lg {width: 100px;}
+}
+
+@media (min-width: 993px) {
+    .w-xxl {width: 300px;}
+}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_static %}
+    <link type="text/css" href="{% static 'main_app/css/base_main_app_styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block container %}
+    <div class="app-container container">
+        <div class="row row-cols-3">
+            {% block left_sidebar %}
+                {% include 'main_app/_left_sidebar_nav.html' %}
+            {% endblock %}
+
+            {% block content %}
+                <div class="col-10 col-lg-6 border-end">
+                    {% block upper_content %}
+                    {% endblock %}
+
+                    {% block main_content %}
+                    {% endblock %}
+                </div>
+            {% endblock %}
+
+            {% block right_sidebar %}
+            {% endblock %}
+
+            {% block footer %}
+                {% include 'main_app/_footer.html' %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

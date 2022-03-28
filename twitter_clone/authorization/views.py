@@ -1,14 +1,14 @@
 from django.shortcuts import render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from django.contrib.auth.views import LoginView, LogoutView
-from .forms import LoginUserForm, RegisterUserForm
 
+from .forms import LoginUserForm, RegisterUserForm
 from .models import FooterLinks
 
-# Create your views here.
+from braces.views import AnonymousRequiredMixin
 
-class IndexView(ListView):
+class IndexView(AnonymousRequiredMixin, ListView):
     model = FooterLinks
     template_name = 'authorization/index.html'
     context_object_name = 'links'
@@ -18,7 +18,7 @@ class IndexView(ListView):
         context['title'] = 'Твиттер. Здесь обсуждают все, что происходит.'
         return context
 
-class RegisterUser(CreateView):
+class RegisterUser(AnonymousRequiredMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'authorization/register.html'
     success_url = reverse_lazy('authorization:login')
@@ -28,7 +28,7 @@ class RegisterUser(CreateView):
         context['title'] = 'Зарегистрироваться в Твиттере.'
         return context
 
-class LoginUser(LoginView):
+class LoginUser(AnonymousRequiredMixin, LoginView):
     form_class = LoginUserForm
     template_name = 'authorization/login.html'
 
@@ -37,9 +37,5 @@ class LoginUser(LoginView):
         context['title'] = 'Вход в Твиттер.'
         return context
 
-    def get_success_url(self):
-        # Поменять на главную страницу /home/
-        return reverse_lazy('authorization:index')
-
 class LogoutUser(LogoutView):
-    next_page = reverse_lazy('authorization:index')
+    pass

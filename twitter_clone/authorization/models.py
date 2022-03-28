@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import AbstractBaseUser, UserManager
@@ -56,8 +57,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         '''Отправляет email текущему пользователю'''
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('main_app:profile', kwargs={'username': self.username})
+
 class FooterLinks(models.Model):    
-    '''Класс FooterLinks предоставляет ссылки на оригинальную документацию и доп. сервисы твиттера в футере'''
+    '''Класс, представляющая модель с ссылками на оригинальную документацию и доп. сервисы твиттера в футере'''
 
     title = CICharField(max_length=50, unique=True, db_index=False, verbose_name='Заголовок')
     url = models.URLField(unique=True, verbose_name='URL')
@@ -68,4 +72,4 @@ class FooterLinks(models.Model):
     class Meta:
         verbose_name = 'Footer links'
         verbose_name_plural = 'Footer links'
-        ordering = ['id']
+        ordering = ('id',)
