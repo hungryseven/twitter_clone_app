@@ -9,7 +9,6 @@ from .models import CustomUser
 UserModel = get_user_model()
 
 class RegisterUserForm(UserCreationForm, CustomModelForm):
-
     template_name = 'authorization/form_snippet.html'
 
     error_messages = {
@@ -20,23 +19,23 @@ class RegisterUserForm(UserCreationForm, CustomModelForm):
         label='Имя пользователя',
         min_length=4,
         help_text='Имя пользователя будет использоваться в качестве логина.',
-        widget=forms.TextInput(attrs={'class': 'form-control mb-2', 'id': 'floatingUsername', 'placeholder': 'Имя пользователя'})
+        widget=forms.TextInput()
     )
     email = forms.CharField(
         label='Адрес электронной почты',
-        widget=forms.EmailInput(attrs={'class': 'form-control mb-2', 'id': 'floatingEmail', 'placeholder': 'Адрес электронной почты'})
+        widget=forms.EmailInput()
     )
     profile_name = forms.CharField(
         label='Имя профиля',
-        widget=forms.TextInput(attrs={'class': 'form-control mb-2', 'id': 'floatingName', 'placeholder': 'Имя'})
+        widget=forms.TextInput()
     )
     password1 = forms.CharField(
         label='Пароль',
-        widget=forms.PasswordInput(attrs={'class': 'form-control mb-2', 'id': 'floatingPassword1', 'placeholder': 'Пароль'})
+        widget=forms.PasswordInput()
     )
     password2 = forms.CharField(
         label='Повтор пароля',
-        widget=forms.PasswordInput(attrs={'class': 'form-control mb-2', 'id': 'floatingPassword2', 'placeholder': 'Повтор пароля'})
+        widget=forms.PasswordInput()
     )
 
     def clean_username(self):
@@ -68,9 +67,9 @@ class LoginUserForm(AuthenticationForm, CustomForm):
 
     username = forms.CharField(
         label='Логин или адрес электронной почты',
-        widget=forms.TextInput(attrs={'class': 'form-control mb-2', 'id': 'floatingUsername', 'placeholder': 'Логин или адрес электронной почты'})
+        widget=forms.TextInput()
     )
     password = forms.CharField(
         label='Пароль',
-        widget=forms.PasswordInput(attrs={'class': 'form-control mb-2', 'id': 'floatingPassword', 'placeholder': 'Пароль'})
+        widget=forms.PasswordInput()
     )

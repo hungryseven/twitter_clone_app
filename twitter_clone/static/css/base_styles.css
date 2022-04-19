@@ -9,3 +9,9 @@ body {
 .help-text {
     font-size: 12px;
 }
+
+.toast {
+    background-color: rgb(29, 155, 240);
+    color: white;
+    width: auto;
+}

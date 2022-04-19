@@ -1,0 +1,23 @@
+{% load widget_tweaks %}
+
+<div class="tweet-form d-flex flex-row px-3 pt-3 pb-2" id="tweet-form{{ id }}">
+    <div class="user-avatar" id="user-avatar">
+        <a href="#">
+            <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+        </a>
+    </div>
+    <div class="form-body flex-fill" id="form-body{{ id }}">
+        <form action="{% url 'tweets:make_tweet' %}" method="post" novalidate>
+            {% csrf_token %}
+            {% render_field tweet_form.parent value=id %}
+            <div class="tweet-form-textarea mb-3" id="tweet-form-textarea{{ id }}">
+                {% render_field tweet_form.text class="tweet-textarea form-control fs-5" rows="3" placeholder=placeholder %}
+            </div>
+            <div class="tweet-form-footer d-flex flex-row align-items-center justify-content-end" id="tweet-form-footer{{ id }}">
+                <span class="chars-counter visually-hidden mx-3" id="chars-counter{{ id }}"></span>
+                <input type="submit" class="make-tweet-btn fw-bold btn rounded-pill" id="make-tweet-btn{{ id }}" value="Ответить" disabled>
+        </form>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+{% extends 'main_app/base_main_app.html' %}
+{% load static %}
+{% load tweets_template_utils %}
+
+{% block main_content %}
+    {% for tweet in object_list %}
+        {% if tweet == detail_tweet %}
+            <div class="detail-tweet" id="detail-tweet{{ tweet.id }}">
+                {% render_detail_tweet tweet %}
+                {% include 'tweets/tweet_modal_snippet.html' with tweet=detail_tweet %}
+            </div>
+            {% if user.is_authenticated %}
+                <div class="border-bottom">
+                    {% render_tweet_form id=detail_tweet.id placeholder="Твитнуть в ответ" %}
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="short-tweet" id="short-tweet{{ tweet.id }}">
+                {% render_short_tweet tweet %}
+                {% include 'tweets/tweet_modal_snippet.html' with tweet=tweet %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% include 'tweets/tweet_modal_snippet.html' with tweet='' %}
+{% endblock %}

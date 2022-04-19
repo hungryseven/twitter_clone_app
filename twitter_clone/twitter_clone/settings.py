@@ -39,6 +39,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'authorization.apps.AuthorizationConfig',
     'main_app.apps.MainAppConfig',
+    'tweets.apps.TweetsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'mptt',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +153,5 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = 'main_app:home'
 LOGOUT_REDIRECT_URL = 'authorization:index'
+
+MPTT_ADMIN_LEVEL_INDENT = 15

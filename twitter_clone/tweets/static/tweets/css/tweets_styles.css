@@ -1,0 +1,151 @@
+/* TEXTAREA */
+
+.tweet-form-textarea textarea {
+    border: none;
+}
+
+.tweet-form-textarea textarea:focus {
+    box-shadow: none;
+}
+
+textarea {
+    resize: none;
+}
+
+.excess-length {
+    color: red;
+}
+
+/* SUBMIT TWEET FORM BTNS */
+
+.make-tweet-btn {
+    color: white;
+    background-color: rgb(29, 155, 240);
+}
+
+.make-tweet-btn:hover {
+    color: white;
+    background-color: rgb(26, 140, 216);
+}
+
+/* SHORT TWEET BODY AS LINK */
+
+.tweet {
+    position: relative;
+}
+
+.tweet-link:not(.detail-tweet .tweet-link) {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.tweet-link:hover:not(.detail-tweet .tweet-link),
+.tweet-actions:hover + .tweet-link,
+.tweet-body-top:hover ~ .tweet-link {
+    background-color: rgba(0, 0, 0, 0.03);
+    transition-duration: 0.2s;
+}
+
+.tweet-usernames,
+.reply-tweet,
+.retweet-tweet,
+.like-tweet,
+.tweet-others {
+    z-index: 20;
+}
+
+.profile-name {
+    text-decoration: none;
+}
+
+.profile-name:hover {
+    text-decoration: underline;
+}
+
+/* TWEET ACTIONS */
+
+.tweet-actions .reply-tweet a,
+.tweet-actions .retweet-tweet a,
+.tweet-actions .like-tweet a,
+.tweet-actions .tweet-others a {
+    color: rgb(83, 100, 113);
+    padding: 8px 10px;
+}
+
+.not-active {
+    color: rgb(83, 100, 113);
+}
+
+.like-active {
+    color: rgb(249, 24, 128);
+}
+
+.retweet-active {
+    color: rgb(0, 186, 124);
+}
+
+.detail-tweet-actions .reply-tweet a,
+.detail-tweet-actions .retweet-tweet a,
+.detail-tweet-actions .like-tweet a {
+    color: rgb(83, 100, 113);
+    padding: 11.5px 8px;
+}
+
+.detail-tweet-actions .tweet-others a {
+    color: rgb(83, 100, 113);
+    padding: 8px 8px;
+}
+
+.reply-tweet a:hover,
+.tweet-others .others-btn:hover {
+    color: rgb(29, 155, 240);
+    border-radius: 50%;
+    background-color: rgba(29, 155, 240, 0.1);
+}
+
+.retweet-tweet a:hover {
+    color: rgb(0, 186, 124);
+    border-radius: 50%;
+    background-color: rgba(0, 186, 124, 0.1);
+}
+
+.like-tweet a:hover {
+    color: rgb(249, 24, 128);
+    border-radius: 50%;
+    background-color: rgba(249, 24, 128, 0.1);
+}
+
+.reply-tweet a:hover + .replies-count {
+    color: rgb(29, 155, 240);
+}
+
+.retweet-tweet a:hover + .retweets-count {
+    color: rgb(0, 186, 124);
+}
+
+.like-tweet a:hover + .likes-count {
+    color: rgb(249, 24, 128);
+}
+
+.dropdown-actions a:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    transition-duration: 0.2s;
+}
+
+/* DETAIL TWEET ACTIONS INFO */
+
+.retweets-info,
+.likes-info {
+    color: rgb(83, 100, 113);
+    text-decoration: none;
+}
+
+.retweets-info:hover,
+.likes-info:hover {
+    color: rgb(83, 100, 113);
+    text-decoration: underline;
+}

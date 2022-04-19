@@ -1,0 +1,41 @@
+{% load main_template_utils %}
+{% load tweets_template_utils %}
+
+<div class="modal fade" id="MakeTweetModal{{ tweet.id }}" tabindex="-1">
+    <div class="modal-dialog" style="max-width: 600px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                {% if not tweet %}
+                    {% render_tweet_form %}
+                {% else %}
+                    <div class="modal-tweet d-flex flex-row px-3 pt-3 pb-2" id="tweet{{ tweet.id }}">
+                        <div class="modal-user-avatar" id="modal-user-avatar{{ tweet.id }}">
+                            <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+                        </div>
+                        <div class="modal-tweet-body flex-fill" id="modal-tweet-body{{ tweet.id }}">
+                            <div class="modal-tweet-body-top d-flex flex-row" id="modal-tweet-body-top{{ tweet.id }}">
+                                <div class="tweet-usernames" id="tweet-usernames{{ tweet.id }}">
+                                    <a href="#" class="profile-name link-dark fw-bold">{{ tweet.user.profile_name }}</a>
+                                    <a href="#" class="username text-muted text-decoration-none">{{ tweet.user.username|at }}</a>
+                                </div>
+                                <div class="dividing-point px-1">
+                                    <span>·</span>
+                                </div>
+                                <div class="tweet-time">
+                                    <span class="text-muted">{{ tweet.pub_date|timesince }}</span>
+                                </div>
+                            </div>
+                            <div class="modal-tweet-content" id="modal-tweet-content{{ tweet.id }}">
+                                <div class="tweet-text fs-6">
+                                    {{ tweet.text|linebreaks }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% render_tweet_form id=tweet.id placeholder="Твитнуть в ответ" %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

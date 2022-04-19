@@ -3,6 +3,9 @@
 
 {% block extra_static %}
     <link type="text/css" href="{% static 'main_app/css/base_main_app_styles.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'tweets/css/tweets_styles.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'tweets/js/tweets_js.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
 {% endblock %}
 
 {% block container %}
@@ -13,12 +16,20 @@
             {% endblock %}
 
             {% block content %}
-                <div class="col-10 col-lg-6 border-end">
+                <div class="col-10 col-lg-6 border-end g-0">
                     {% block upper_content %}
                     {% endblock %}
 
                     {% block main_content %}
                     {% endblock %}
+                    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" style="z-index: 100">
+                        <div class="toast" id="toastNotification" data-bs-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-body">
+                                <div class="toast-text fs-6">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% endblock %}
 

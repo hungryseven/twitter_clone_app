@@ -9,7 +9,7 @@ from django.contrib.postgres.fields import CICharField, CIEmailField
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     '''
-        Класс, представляющий кастомную модель пользователя. Для аутентификации по умолчанию используется username.
+        Класс, представляющий кастомную модель таблицы БД пользователя. Для аутентификации по умолчанию используется username.
         Кастомный бекэнд (./auth_backend.py) предоставляет кастомную аутентификацию как по username, так и по email. 
         Для полей с ограничением "unique" используются поля с типом "citext", которые не чувствительны к регистру.
         Следовательно, значения для юзернеймов test, TEST, tEsT и т.д. эквиваленты друг другу.
@@ -42,8 +42,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email']
 
     class Meta:
-        verbose_name = 'user'
-        verbose_name_plural = 'users'
+        verbose_name = 'пользователя'
+        verbose_name_plural = 'Пользователи'
 
     def clean(self):
         super().clean()
@@ -61,15 +61,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return reverse('main_app:profile', kwargs={'username': self.username})
 
 class FooterLinks(models.Model):    
-    '''Класс, представляющая модель с ссылками на оригинальную документацию и доп. сервисы твиттера в футере'''
+    '''Класс, представляющий модель таблицы БД с ссылками на оригинальную документацию и доп. сервисы твиттера в футере'''
 
     title = CICharField(max_length=50, unique=True, db_index=False, verbose_name='Заголовок')
     url = models.URLField(unique=True, verbose_name='URL')
 
+    class Meta:
+        verbose_name = 'ссылку футера'
+        verbose_name_plural = 'Ссылки футера'
+        ordering = ('id',)
+
     def __str__(self):
         return self.title
-
-    class Meta:
-        verbose_name = 'Footer links'
-        verbose_name_plural = 'Footer links'
-        ordering = ('id',)

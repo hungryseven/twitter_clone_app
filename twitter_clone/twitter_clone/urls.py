@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('authorization.urls')),
     path('', include('main_app.urls')),
+    path('', include('tweets.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
