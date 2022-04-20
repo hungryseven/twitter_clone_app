@@ -5,7 +5,9 @@
     
     <!-- Блок с аватаром пользователя -->
     <div class="user-avatar" id="user-avatar{{ tweet.id }}">
-        <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+        <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}">
+            <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+        </a>
     </div>
 
     <!-- Блок со всем телом твита -->
@@ -14,8 +16,8 @@
         <!-- Блок с юзернеймом, именем профиля и временем, прошедшим после публикации твита -->
         <div class="tweet-body-top d-flex flex-row mb-1" id="tweet-body-top{{ tweet.id }}">
             <div class="tweet-usernames" id="tweet-usernames{{ tweet.id }}">
-                <a href="#" class="profile-name link-dark fw-bold">{{ tweet.user.profile_name }}</a>
-                <a href="#" class="username text-muted text-decoration-none">{{ tweet.user.username|at }}</a>
+                <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}" class="profile-name link-dark fw-bold">{{ tweet.user.profile_name }}</a>
+                <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}" class="username text-muted text-decoration-none">{{ tweet.user.username|at }}</a>
             </div>
             <div class="dividing-point px-1">
                 <span>·</span>

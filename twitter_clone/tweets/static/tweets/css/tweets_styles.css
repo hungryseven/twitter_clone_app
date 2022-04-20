@@ -54,7 +54,8 @@ textarea {
 .reply-tweet,
 .retweet-tweet,
 .like-tweet,
-.tweet-others {
+.tweet-others,
+.user-avatar img {
     z-index: 20;
 }
 

@@ -1,5 +1,3 @@
-import json
-from urllib import request
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import View, ListView
@@ -12,9 +10,10 @@ from braces.views import JSONResponseMixin
 from .models import Tweet
 from .forms import TweetForm
 from .utils import TweetEditMixin
+from main_app.utils import DataMixin
 from authorization.models import CustomUser
 
-class DetailtTweetView(SingleObjectMixin, ListView):
+class DetailtTweetView(DataMixin, SingleObjectMixin, ListView):
     '''Отображает главный/детальный твит на странице, а также всех его предков и потомков.'''
 
     template_name = 'tweets/detail_tweet.html'
@@ -30,7 +29,6 @@ class DetailtTweetView(SingleObjectMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['detail_tweet'] = self.object
-        context['form'] = TweetForm()
         return context
 
     def get_queryset(self):

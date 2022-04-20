@@ -1,0 +1,14 @@
+{% extends 'user_profile/base_profile.html' %}
+{% load static %}
+{% load tweets_template_utils %}
+
+{% block main_content %}
+    <div class="tweets-container">
+        {% for tweet in likes %}
+            <div class="profile-likes" id="profile-likes{{ tweet.id }}">
+                {% render_short_tweet tweet %}
+                {% include 'tweets/tweet_modal_snippet.html' with tweet=tweet %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

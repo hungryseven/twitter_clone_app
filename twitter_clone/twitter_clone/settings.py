@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'authorization.apps.AuthorizationConfig',
     'main_app.apps.MainAppConfig',
     'tweets.apps.TweetsConfig',
+    'user_profile.apps.UserProfileConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

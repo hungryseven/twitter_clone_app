@@ -100,5 +100,3 @@ class TweetAdmin(DraggableMPTTAdmin):
         return mark_safe(', '.join(users_list))
 
 admin.site.register(Tweet, TweetAdmin)
-
-

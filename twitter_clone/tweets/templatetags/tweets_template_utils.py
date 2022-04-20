@@ -33,6 +33,7 @@ def render_tweet_form(context, id='', placeholder='Что происходит?'
     '''
 
     return {
+        'request': context['view'].request,
         'tweet_form': context['form'],
         'id': id,
         'placeholder': placeholder
