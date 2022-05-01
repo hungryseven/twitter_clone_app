@@ -1,11 +1,21 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.contrib.postgres.fields import CICharField, CIEmailField
 
 # Create your models here.
+
+def get_profile_photo_path(instance, filename):
+    '''Возвращает путь для загрузки фото профиля пользователя.'''
+    return f'photos/{instance.username}/{filename}'
+
+class UserFollow(models.Model):
+    followee = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='follower_set') # Тот, на кого подписались
+    follower = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='followee_set') # Тот, кто подписался
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     '''
@@ -27,10 +37,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         error_messages={'unique': 'Адрес электронной почты уже занят.'},
         verbose_name='Email'
     )
-    profile_name = models.CharField(max_length=50, blank=True, verbose_name='Имя профиля')
+    profile_name = models.CharField(max_length=50, verbose_name='Имя профиля')
     about = models.CharField(max_length=160, blank=True, verbose_name='О себе')
     location = models.CharField(max_length=30, blank=True, verbose_name='Местоположение')
     website = models.URLField(max_length=100, blank=True, verbose_name='Веб-сайт')
+    profile_photo = models.ImageField(upload_to=get_profile_photo_path, blank=True, default=f'photos/default.png/', verbose_name='Фото профиля')
+    followers = models.ManyToManyField('self', blank=True, related_name='followees', symmetrical=False, through='UserFollow')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
@@ -58,7 +70,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def get_absolute_url(self):
-        return reverse('main_app:profile', kwargs={'username': self.username})
+        return reverse('user_profile:profile_tweets', kwargs={'username': self.username})
+
+    def get_profile_photo(self):
+        return f'{settings.MEDIA_URL}{self.profile_photo}'
 
 class FooterLinks(models.Model):    
     '''Класс, представляющий модель таблицы БД с ссылками на оригинальную документацию и доп. сервисы твиттера в футере'''

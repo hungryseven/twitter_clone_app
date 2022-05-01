@@ -1,0 +1,52 @@
+{% extends 'main_app/base_main_app.html' %}
+{% load main_template_utils %}
+{% load profile_template_utils %}
+{% load static %}
+
+{% block extra_static %}
+    {{ block.super }}
+    <link type="text/css" href="{% static 'user_profile/css/profile_styles.css' %}" rel="stylesheet">
+    <script type="module" src="{% static 'user_profile/js/user_profile_js.js' %}" defer></script>
+{% endblock %}
+
+{% block upper_content %}
+    <div class="follow-container">
+        <div class="follow-header d-flex flex-row align-items-center px-3 pt-2 mb-1">
+            <div class="profile-back-btn" style="min-width: 66px;">
+                <a href="{{ profile_owner.get_absolute_url }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="" viewBox="0 0 24 24">
+                        <path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="user-nicknames">
+                <div class="user-profile-name">
+                    <span>{{ profile_owner.profile_name }}</span>
+                </div>
+                <div class="user-username">
+                    <span>{{ profile_owner.username|at }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-container">
+            <ul class="nav border-bottom">
+                <!-- Отобразит эту вкладку, если текущий авторизованный пользователь не на своей странице или такие пользователи существуют -->
+                {% if profile_owner != user and familiar_followers %}
+                    <li class="nav-item profile py-2 flex-grow-1 text-center">
+                        <a class="nav-link" href="{% url 'user_profile:followers_you_follow' profile_owner.username %}">Читатели, которых вы знаете</a>
+                    </li>
+                {% endif %}
+                
+                <li class="nav-item profile py-2 flex-grow-1 text-center">
+                    <a class="nav-link" href="{% url 'user_profile:user_followers' profile_owner.username %}">Читателей</a>
+                </li>
+                <li class="nav-item profile py-2 flex-grow-1 text-center">
+                    <a class="nav-link" href="{% url 'user_profile:user_following' profile_owner.username %}">Читаемые</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main_content %}
+{% endblock %}

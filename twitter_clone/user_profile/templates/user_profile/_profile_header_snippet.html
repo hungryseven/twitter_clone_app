@@ -1,0 +1,19 @@
+{% load profile_template_utils %}
+
+<div class="profile-header px-3 pt-2 mb-3">
+    <div class="d-flex flex-row align-items-center">
+        <div class="user-photo me-auto">
+            <a href="#"><img src="{{ profile_owner.get_profile_photo }}"></a>
+        </div>
+        <div class="user-actions">
+            <!-- Если текущий авторизованный пользователь находится на своей странице,
+                то рендерим кнопку для апдейта профиля, в противном случае кнопку для подписки/отписки -->
+            {% if profile_owner == current_user and current_user.is_authenticated %}
+                <button class="update-profile-btn btn btn-light border rounded-pill" data-bs-toggle="modal" data-bs-target="#UpdateProfileModal">Изменить профиль</button>
+                {% render_profile_modal current_user profile_form %}
+            {% else %}
+                <a href="" class="follow-btn btn rounded-pill" id="follow-btn{{ profile_owner.pk }}" role="button">Читать</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

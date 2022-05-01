@@ -5,11 +5,14 @@
 {% block main_content %}
     <div class="tweets-container">
         {% for tweet in object_list %}
+            <!-- Если твит является детальным/главным твитом(из контекста) -->
             {% if tweet == detail_tweet %}
                 <div class="detail-tweet" id="detail-tweet{{ tweet.id }}">
                     {% render_detail_tweet tweet %}
                     {% include 'tweets/tweet_modal_snippet.html' with tweet=detail_tweet %}
                 </div>
+
+                <!-- Если пользователь авторизован, то рендерим форму ответа(создания твита) под главным твитом на странице -->
                 {% if user.is_authenticated %}
                     <div class="border-bottom">
                         {% render_tweet_form id=detail_tweet.id placeholder="Твитнуть в ответ" %}

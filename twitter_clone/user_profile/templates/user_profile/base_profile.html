@@ -1,32 +1,22 @@
 {% extends 'main_app/base_main_app.html' %}
+{% load profile_template_utils %}
 {% load static %}
 
 {% block extra_static %}
     {{ block.super }}
     <link type="text/css" href="{% static 'user_profile/css/profile_styles.css' %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static 'user_profile/js/user_profile_js.js' %}" defer></script>
+    <script type="module" src="{% static 'user_profile/js/user_profile_js.js' %}" defer></script>
 {% endblock %}
 
 {% block upper_content %}
     <div class="profile-container">
+        {% render_profile_header profile_owner user %}
+
+        {% render_user_info profile_owner user %}
     </div>
-    <div class="nav-container">
-        <ul class="nav border-bottom">
-            <li class="nav-item profile py-2 flex-grow-1 text-center">
-                <a class="nav-link" href="{% url 'user_profile:profile_tweets' username %}">Твиты</a>
-            </li>
-            <li class="nav-item profile py-2 flex-grow-1 text-center">
-                <a class="nav-link" href="{% url 'user_profile:profile_replies' username %}">Твиты и ответы</a>
-            </li>
-            <li class="nav-item profile py-2 flex-grow-1 text-center">
-                <a class="nav-link" href="#">Медиа</a>
-            </li>
-            <li class="nav-item profile py-2 flex-grow-1 text-center">
-                <a class="nav-link" href="{% url 'user_profile:profile_likes' username %}">Нравится</a>
-            </li>
-        </ul>
-    </div>
-{% endblock %}>
+
+    {% render_profile_navbar profile_owner %}
+{% endblock %}
 
 {% block main_content %}
 {% endblock %}

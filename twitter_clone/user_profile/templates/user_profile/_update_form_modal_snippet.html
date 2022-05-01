@@ -1,0 +1,42 @@
+{% load widget_tweaks %}
+
+<div class="modal fade" id="UpdateProfileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form action="{% url 'user_profile:update_profile' %}" method="post" id="UpdateForm" novalidate>
+                    {% csrf_token %}
+                    <div class="form-header d-flex flex-row align-items-center mb-4">
+                        <button type="button" class="btn-close me-4" data-bs-dismiss="modal"></button>
+                        <span class="form-name me-auto">Изменить профиль</span>
+                        <input type="submit" class="update-form-btn btn btn-dark rounded-pill" id="make-tweet-btn{{ id }}" value="Сохранить">
+                    </div>
+                    <div class="input-group mb-3">
+                        {% render_field profile_form.profile_photo class="image-input" %}
+                        <div class="user-photo">
+                            <img src="{{ current_user.get_profile_photo }}" class="photo-preview">
+                            <label for="{{ profile_form.profile_photo.id_for_label }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24" fill="currentColor">
+                                    <path d="M19.708 22H4.292C3.028 22 2 20.972 2 19.708V7.375C2 6.11 3.028 5.083 4.292 5.083h2.146C7.633 3.17 9.722 2 12 2c2.277 0 4.367 1.17 5.562 3.083h2.146C20.972 5.083 22 6.11 22 7.375v12.333C22 20.972 20.972 22 19.708 22zM4.292 6.583c-.437 0-.792.355-.792.792v12.333c0 .437.355.792.792.792h15.416c.437 0 .792-.355.792-.792V7.375c0-.437-.355-.792-.792-.792h-2.45c-.317.05-.632-.095-.782-.382-.88-1.665-2.594-2.7-4.476-2.7-1.883 0-3.598 1.035-4.476 2.702-.16.302-.502.46-.833.38H4.293z"></path>
+                                    <path d="M12 8.167c-2.68 0-4.86 2.18-4.86 4.86s2.18 4.86 4.86 4.86 4.86-2.18 4.86-4.86-2.18-4.86-4.86-4.86zm2 5.583h-1.25V15c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-1.25H10c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h1.25V11c0-.414.336-.75.75-.75s.75.336.75.75v1.25H14c.414 0 .75.336.75.75s-.336.75-.75.75z"></path>
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+                    {% for field in profile_form %}
+                        <!-- Рендерит все поля, кроме файл инпута для фотографии -->
+                        {% if field.name != 'profile_photo' %}
+                            <div class="form-floating mb-3">
+                                {% render_field field class="form-control mb-1" placeholder=field.label %}
+                                {{ field.label_tag }}
+                                <p class="counter {{ field.name }}-counter visually-hidden">
+                                    <span class="current-length"></span> / <span class="max-length"></span>
+                                </p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

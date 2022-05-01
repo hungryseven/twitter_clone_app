@@ -1,0 +1,23 @@
+{% extends 'user_profile/base_follow.html' %}
+{% load profile_template_utils %}
+{% load main_template_utils %}
+{% load static %}
+
+{% block main_content %}
+    <div class="followees-container">
+        {% for followee in followees %}
+            <div class="followees" id="followee{{ user.pk }}">
+                {% render_user_card followee user %}
+            </div>
+        {% empty %}
+            <div class="empty-followees text-center py-5 px-5">
+                <div class="head-message">
+                    <span>{{ profile_owner.username|at }}<br> никого не читает</span>
+                </div>
+                <div class="bottom-message">
+                    <span>Когда он начнет читать других пользователей, здесь появится их список.</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

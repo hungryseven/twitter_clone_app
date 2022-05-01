@@ -46,7 +46,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'profile_name', 'about', 'location', 'website', 'is_staff', 'is_active')
+        fields = ('username', 'email', 'profile_name', 'about', 'location', 'website', 'profile_photo', 'is_staff', 'is_active')
 
 
 class CustomUserAdmin(BaseUserAdmin):
@@ -60,7 +60,7 @@ class CustomUserAdmin(BaseUserAdmin):
     list_filter = ('is_staff', 'is_active')
     fieldsets = (
         ('Персональные данные', {'fields': ('username', 'email', 'password')}),
-        ('Персональная информация', {'fields': ('profile_name', 'about', 'location', 'website', 'date_joined')}),
+        ('Персональная информация', {'fields': ('profile_name', 'about', 'location', 'website', 'profile_photo', 'date_joined')}),
         ('Разрешения', {'fields': ('is_staff', 'is_active')}),
     )
     add_fieldsets = (

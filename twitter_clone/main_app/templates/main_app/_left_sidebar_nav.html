@@ -123,7 +123,7 @@
             <div class="dropup user-dropup">
                 <a href="#" class="row row-cols-1 row-cols-lg-3 align-items-center link-dark text-decoration-none rounded-pill py-2" id="dropdownUser" data-bs-toggle="dropdown">
                     <div class="col-12 col-lg-3">
-                        <img src="https://github.com/mdo.png" alt="" width="40" height="40" class="rounded-circle me-3">
+                        <img src="{{ request.user.get_profile_photo }}" alt="" width="40" height="40" class="rounded-circle me-3">
                     </div>
                     <div class="col-lg-7 d-none d-lg-block">
                         <span><strong>{{ user.profile_name }}</strong></span></br>

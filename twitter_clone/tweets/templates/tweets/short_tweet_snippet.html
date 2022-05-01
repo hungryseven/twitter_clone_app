@@ -1,12 +1,23 @@
 {% load main_template_utils %}
 {% load tweets_template_utils %}
 
-<div class="tweet d-flex flex-row px-3 pt-3 border-bottom" id="tweet{{ tweet.id }}">
+{% if is_retweet %}
+    <div class="tweet d-flex flex-row px-3 pt-1 border-bottom" id="tweet{{ tweet.id }}">
+{% else %}
+    <div class="tweet d-flex flex-row px-3 pt-3 border-bottom" id="tweet{{ tweet.id }}">
+{% endif %}
     
     <!-- Блок с аватаром пользователя -->
-    <div class="user-avatar" id="user-avatar{{ tweet.id }}">
-        <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}">
-            <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+    <div class="user-avatar d-flex flex-column" id="user-avatar{{ tweet.id }}">
+        {% if is_retweet %}
+            <div class="retweet-info-icon mb-1 align-self-end">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(83, 100, 113)" class="" viewBox="0 0 24 24">
+                    <path d="M23.615 15.477c-.47-.47-1.23-.47-1.697 0l-1.326 1.326V7.4c0-2.178-1.772-3.95-3.95-3.95h-5.2c-.663 0-1.2.538-1.2 1.2s.537 1.2 1.2 1.2h5.2c.854 0 1.55.695 1.55 1.55v9.403l-1.326-1.326c-.47-.47-1.23-.47-1.697 0s-.47 1.23 0 1.697l3.374 3.375c.234.233.542.35.85.35s.613-.116.848-.35l3.375-3.376c.467-.47.467-1.23-.002-1.697zM12.562 18.5h-5.2c-.854 0-1.55-.695-1.55-1.55V7.547l1.326 1.326c.234.235.542.352.848.352s.614-.117.85-.352c.468-.47.468-1.23 0-1.697L5.46 3.8c-.47-.468-1.23-.468-1.697 0L.388 7.177c-.47.47-.47 1.23 0 1.697s1.23.47 1.697 0L3.41 7.547v9.403c0 2.178 1.773 3.95 3.95 3.95h5.2c.664 0 1.2-.538 1.2-1.2s-.535-1.2-1.198-1.2z"></path>
+                </svg>
+            </div>
+        {% endif %}
+        <a href="{{ tweet.user.get_absolute_url }}">
+            <img src="{{ tweet.user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
         </a>
     </div>
 
@@ -14,16 +25,23 @@
     <div class="tweet-body flex-fill" id="tweet-body{{ tweet.id }}">
 
         <!-- Блок с юзернеймом, именем профиля и временем, прошедшим после публикации твита -->
-        <div class="tweet-body-top d-flex flex-row mb-1" id="tweet-body-top{{ tweet.id }}">
-            <div class="tweet-usernames" id="tweet-usernames{{ tweet.id }}">
-                <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}" class="profile-name link-dark fw-bold">{{ tweet.user.profile_name }}</a>
-                <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}" class="username text-muted text-decoration-none">{{ tweet.user.username|at }}</a>
-            </div>
-            <div class="dividing-point px-1">
-                <span>·</span>
-            </div>
-            <div class="tweet-time">
-                <span class="text-muted">{{ tweet.pub_date|timesince }}</span>
+        <div class="tweet-body-top d-flex flex-column mb-1" id="tweet-body-top{{ tweet.id }}">
+            {% if is_retweet %}
+                <div class="retweet-info-text mb-1">
+                    <span>Ретвит</span>
+                </div>
+            {% endif %}
+            <div class="tweet-user-info d-flex flex-row" id="tweet-user-info{{ tweet.id }}">
+                <div class="tweet-usernames" id="tweet-usernames{{ tweet.id }}">
+                    <a href="{{ tweet.user.get_absolute_url }}" class="profile-name link-dark fw-bold">{{ tweet.user.profile_name }}</a>
+                    <a href="{{ tweet.user.get_absolute_url }}" class="username text-muted text-decoration-none">{{ tweet.user.username|at }}</a>
+                </div>
+                <div class="dividing-point px-1">
+                    <span>·</span>
+                </div>
+                <div class="tweet-time">
+                    <span class="text-muted">{{ tweet.pub_date|timesince }}</span>
+                </div>
             </div>
         </div>
 
@@ -68,14 +86,16 @@
                     </svg>
                 </a>
                 <ul class="dropdown-menu dropdown-actions" aria-labelledby="dropdown-actions{{ tweet.id }}">
-                    <li>
-                        <a href="" class="d-flex flex-row dropdown-item bookmark-btn" id="bookmark-btn{{ tweet.id }}" role="button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-3" viewBox="0 0 16 16">
-                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                            </svg>
-                            <span class="item-text" style="color: black">Закладка</span>
-                        </a>
-                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li>
+                            <a href="" class="d-flex flex-row dropdown-item bookmark-btn" id="bookmark-btn{{ tweet.id }}" role="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-3" viewBox="0 0 16 16">
+                                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                                </svg>
+                                <span class="item-text" style="color: black">Закладка</span>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li>
                         <a href="" class="d-flex flex-row dropdown-item copy-tweet-btn" id="copy-tweet-btn{{ tweet.id }}" role="button" data-clipboard-text="{{ request.scheme }}://{{ request.get_host }}{{ tweet.get_absolute_url }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-3" viewBox="0 0 24 24">

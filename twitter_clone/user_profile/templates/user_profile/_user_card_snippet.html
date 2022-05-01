@@ -1,0 +1,40 @@
+{% load main_template_utils %}
+{% load profile_template_utils %}
+
+<div class="user-card d-flex flex-row pt-2 pb-3 px-3" id="user-card{{ user.pk }}">
+    <div class="user-avatar" id="user-avatar{{ user.pk }}">
+        <a href="{{ user.get_absolute_url }}">
+            <img src="{{ user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
+        </a>
+    </div>
+    <div class="user-card-body flex-fill" id="user-card-body{{ user.pk }}">
+        <div class="card-body-top d-flex align-items-center">
+            <div class="card-nicknames me-auto">
+                <div class="card-profile-name" id="card-profile-name{{ user.pk }}">
+                    <a href="{{ user.get_absolute_url }}">{{ user.profile_name }}</a>
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="card-username" id="card-username{{ user.pk }}">
+                        <a href="{{ user.get_absolute_url }}">{{ user.username|at }}</a>
+                    </div>
+                    {% is_follow_you user current_user %}
+                </div>
+            </div>
+            
+            <!-- Не будет отображать кнопку подписаться/отписаться, если карточка принадлежит текущему авторизованному пользователю -->
+            {% if user != current_user %}
+                <div class="card-btn">
+                    <a href="" class="follow-btn btn rounded-pill" id="follow-btn{{ user.pk }}" role="button">Читать</a>
+                </div>
+            {% endif %}
+        </div>
+        {% if user.about %}
+            <div class="card-body-bottom mt-2">
+                <div class="user-about" id="user-about{{ user.pk }}">
+                    <span>{{ user.about }}</span>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <a href="{{ user.get_absolute_url }}" class="user-link" id="user-link{{ user.pk }}"><span></span></a>
+</div>

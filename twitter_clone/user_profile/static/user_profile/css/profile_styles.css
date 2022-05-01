@@ -23,3 +23,303 @@
     content: "";
     height: 4px;
 }
+
+/* PROFILE PHOTO */
+
+.user-photo {
+    display: inline-block;
+    overflow: hidden;
+    width: 25%;
+    padding-bottom: 25%;
+    height: 0;
+    position: relative;
+}
+
+.user-photo img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* PROFILE BUTTONS */
+
+.update-profile-btn {
+    width: 180px;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.update-profile-btn:hover {
+    background-color: rgba(15, 20, 25, 0.1);
+}
+
+.update-form-btn {
+    background-color: rgb(15, 20, 25);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.follow-btn {
+    width: 150px;
+    font-size: 15px;
+    font-weight: 700;
+    color: rgb(255, 255, 255);
+    background-color: rgb(15, 20, 25);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.follow-btn.followed {
+    width: 150px;
+    font-size: 15px;
+    font-weight: 700;
+    color: rgb(15, 20, 25);
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgb(207, 217, 222);
+}
+
+.follow-btn:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(39, 44, 48);
+    transition-duration: 0.2;
+}
+
+.follow-btn.followed:hover {
+    color: rgb(244, 33, 46);
+    background-color: rgba(244, 33, 46, 0.1);
+    border-color: rgb(253, 201, 206);
+    transition-duration: 0.2;
+}
+
+/* UPDATE PROFILE FORM */
+
+.form-name {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.form-floating > textarea {
+    height: 90px !important;
+}
+
+.counter {
+    color: rgb(83, 100, 113);
+    font-size: 15px;
+    text-align: right;
+}
+
+/* Скрывает файл инпут для пользователя, но не для браузера. */
+.image-input {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.user-photo label {
+    position: absolute;
+    z-index: 100;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: -25px 0 0 -25px;
+    backdrop-filter: blur(4px);
+    background-color: rgba(15, 20, 25, 0.75);
+    left: 50%;
+    top: 50%;
+}
+
+.user-photo label:hover {
+    backdrop-filter: blur(4px);
+    background-color: rgba(39, 44, 48, 0.75);
+}
+
+.user-photo svg {
+    position: absolute;
+    margin: -12px 0 0 -12px;
+    color: white;
+    left: 50%;
+    top: 50%;
+}
+
+/* PROFILE INFO */
+
+.user-profile-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgb(15, 20, 25);
+}
+
+.user-username {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(83, 100, 113);
+}
+
+.user-about {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(15, 20, 25);
+}
+
+.user-location,
+.user-website,
+.user-register-date {
+    margin-right: 12px;
+    color: rgb(83, 100, 113);
+}
+
+.user-location svg,
+.user-website svg,
+.user-register-date svg {
+    margin-right: 4px;
+}
+
+.user-location span,
+.user-website span,
+.user-register-date span,
+.followees,
+.followers {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.user-website a {
+    text-decoration: none;
+}
+
+.user-website span:hover,
+.user-website svg:hover + span {
+    text-decoration: underline;
+}
+
+.user-website svg {
+    color: rgb(83, 100, 113);
+}
+
+.followees-info {
+    margin-right: 20px;
+}
+
+.followees-info,
+.followers-info {
+    text-decoration: none;
+    color: rgb(83, 100, 113);
+}
+
+.followees-info:hover,
+.followers-info:hover {
+    text-decoration: underline;
+    color: rgb(83, 100, 113);
+}
+
+.followers-info span,
+.followees-info span {
+    font-size: 16px;
+    font-weight: 700;
+    color: rgb(15, 20, 25);
+}
+
+.is-follow-you span {
+    color: rgb(83, 100, 113);
+    background-color: rgb(239, 243, 244);
+    font-weight: 500;
+    font-size: 11px;
+    margin-left: 4px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.fimiliar-followers-link,
+.fimiliar-followers-text {
+    color: rgb(83, 100, 113);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.fimiliar-followers-link {
+    text-decoration: none;
+}
+
+.fimiliar-followers-link:hover {
+    color: rgb(83, 100, 113);
+    text-decoration: underline;
+}
+
+/* FOLLOW PAGES */
+
+.profile-back-btn a {
+    padding: 9.5px 8px;
+    color: rgb(15, 20, 25);
+}
+
+.profile-back-btn a:hover {
+    color: rgb(15, 20, 25);
+    border-radius: 50%;
+    background-color: rgba(15, 20, 25, 0.1);
+}
+
+.head-message span {
+    color: rgb(15, 20, 25);
+    font-size: 31px;
+    font-weight: 800;
+}
+
+.bottom-message span {
+    color: rgb(83, 100, 113);
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* FOLLOW CARDS */
+
+.card-profile-name a {
+    color: rgb(15, 20, 25);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.card-profile-name a:hover {
+    text-decoration: underline;
+}
+
+.card-username a {
+    color: rgb(83, 100, 113);
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.card-btn .btn {
+    padding: 3.5px;
+}
+
+.user-card {
+    position: relative;
+}
+
+.user-link {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.user-link:hover,
+.user-card-body:hover ~ .user-link {
+    background-color: rgba(0, 0, 0, 0.03);
+    transition-duration: 0.2s;
+}
+
+.card-btn,
+.card-nicknames {
+    z-index: 20;
+}

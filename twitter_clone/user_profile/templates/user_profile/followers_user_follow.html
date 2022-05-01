@@ -1,0 +1,23 @@
+{% extends 'user_profile/base_follow.html' %}
+{% load profile_template_utils %}
+{% load main_template_utils %}
+{% load static %}
+
+{% block main_content %}
+    <div class="familiar-followers-container">
+        {% for follower in familiar_followers %}
+            <div class="familiar-follower" id="familiar-follower{{ user.pk }}">
+                {% render_user_card follower user %}
+            </div>
+        {% empty %}
+            <div class="empty-familiar-followers text-center py-5 px-5">
+                <div class="head-message">
+                    <span>У {{ profile_owner.username|at }} пока нет читателей, которых вы знаете</span>
+                </div>
+                <div class="bottom-message">
+                    <span>Когда у этого пользователя появятся читатели, которых вы знаете, их список будет отображаться здесь.</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,6 @@
+<!-- Если текущий авторизованный пользователь находится в подписках у данного -->
+{% if current_user in user.followees.all and current_user.is_authenticated %}
+    <div class="is-follow-you">
+        <span>Читает вас</span>
+    </div>
+{% endif %}

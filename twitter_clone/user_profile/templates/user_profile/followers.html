@@ -1,0 +1,25 @@
+{% extends 'user_profile/base_follow.html' %}
+{% load profile_template_utils %}
+{% load static %}
+
+{% block main_content %}
+    <div class="followers-container">
+        {% for follower in followers %}
+            <div class="follower" id="follower{{ user.pk }}">
+                {% render_user_card follower user %}
+            </div>
+        {% empty %}
+            <div class="empty-followers text-center py-5 px-5">
+                <div class="head-message">
+                    <span>Ищете читателей?</span>
+                </div>
+                <div class="bottom-message">
+                    <span>
+                        Когда вас начнут читать другие пользователи, здесь появится их список. 
+                        Чтобы привлечь читателей, публикуйте твиты и активно взаимодействуйте с людьми.
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

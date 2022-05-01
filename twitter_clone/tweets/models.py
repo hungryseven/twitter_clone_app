@@ -28,6 +28,7 @@ class Tweet(MPTTModel):
     и представляющий модель таблицы БД с твитами пользователей.
     Связан зависимостью с моделью CustomUser на стороне "много" и рекурсивной зависимостью с самим собой.
     '''
+    
     text = models.CharField(max_length=140, db_index=True, verbose_name='Текст твита')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     likes = models.ManyToManyField(User, blank=True, related_name='liked_tweets', through='TweetLike')

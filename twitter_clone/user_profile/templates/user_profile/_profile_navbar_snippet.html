@@ -1,0 +1,16 @@
+<div class="nav-container">
+    <ul class="nav border-bottom">
+        <li class="nav-item profile py-2 flex-grow-1 text-center">
+            <a class="nav-link" href="{% url 'user_profile:profile_tweets' profile_owner.username %}">Твиты</a>
+        </li>
+        <li class="nav-item profile py-2 flex-grow-1 text-center">
+            <a class="nav-link" href="{% url 'user_profile:profile_replies' profile_owner.username %}">Твиты и ответы</a>
+        </li>
+        <li class="nav-item profile py-2 flex-grow-1 text-center">
+            <a class="nav-link" href="#">Медиа</a>
+        </li>
+        <li class="nav-item profile py-2 flex-grow-1 text-center">
+            <a class="nav-link" href="{% url 'user_profile:profile_likes' profile_owner.username %}">Нравится</a>
+        </li>
+    </ul>
+</div>

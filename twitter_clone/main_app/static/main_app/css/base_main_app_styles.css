@@ -47,10 +47,15 @@
 }
 
 /* Задает ширину сайдбару с меню слева. 100px - на [xs-lg) breakpoints, 300px на [lg-xxl] breakpoints */
-@media (min-width: 992px) {
+@media (max-width: 992px) {
     .w-lg {width: 100px;}
 }
 
-@media (min-width: 993px) {
-    .w-xxl {width: 300px;}
+@media (min-width: 992px) {
+    .w-xxl {width: 245px;}
+}
+
+/* Фиксированная ширина в 600px для блока контента при размере экрана > 720px */
+@media (min-width: 720px) {
+    .content-width {width: 600px;}
 }

@@ -5,13 +5,13 @@
     <!-- Блок с инфой о юзере(аватар, юзернейм, имя профиля) -->
     <div class="d-flex flex-row user-info align-items-center mb-3" id="user-info{{ detail_tweet.id }}">
         <div class="user-avatar" id="user-avatar{{ detail_tweet.id }}">
-            <a href="{% url 'user_profile:profile_tweets' detail_tweet.user.username %}">
-                <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+            <a href="{{ detail_tweet.user.get_absolute_url }}">
+                <img src="{{ detail_tweet.user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
             </a>
         </div>
         <div class="d-flex flex-column detail-tweet-usernames" id="detail-tweet-usernames{{ detail_tweet.id }}">
-            <a href="{% url 'user_profile:profile_tweets' detail_tweet.user.username %}" class="profile-name link-dark fw-bold">{{ detail_tweet.user.profile_name }}</a>
-            <a href="{% url 'user_profile:profile_tweets' detail_tweet.user.username %}" class="username text-muted text-decoration-none">{{ detail_tweet.user.username|at }}</a>
+            <a href="{{ detail_tweet.user.get_absolute_url }}" class="profile-name link-dark fw-bold">{{ detail_tweet.user.profile_name }}</a>
+            <a href="{{ detail_tweet.user.get_absolute_url }}" class="username text-muted text-decoration-none">{{ detail_tweet.user.username|at }}</a>
         </div>
     </div>
 
@@ -70,14 +70,16 @@
                 </svg>
             </a>
             <ul class="dropdown-menu dropdown-actions" aria-labelledby="dropdown-actions{{ detail_tweet.id }}">
-                <li>
-                    <a href="" class="d-flex flex-row dropdown-item bookmark-btn" id="bookmark-btn{{ detail_tweet.id }}" role="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-3" viewBox="0 0 16 16">
-                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                        </svg>
-                        <span class="item-text" style="color: black">Закладка</span>
-                    </a>
-                </li>
+                {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="" class="d-flex flex-row dropdown-item bookmark-btn" id="bookmark-btn{{ detail_tweet.id }}" role="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-3" viewBox="0 0 16 16">
+                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                            </svg>
+                            <span class="item-text" style="color: black">Закладка</span>
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="" class="d-flex flex-row dropdown-item copy-tweet-btn" id="copy-tweet-btn{{ detail_tweet.id }}" role="button" data-clipboard-text="{{ request.scheme }}://{{ request.get_host }}{{ detail_tweet.get_absolute_url }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-3" viewBox="0 0 24 24">

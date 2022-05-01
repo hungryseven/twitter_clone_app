@@ -2,8 +2,8 @@
 
 <div class="tweet-form d-flex flex-row px-3 pt-3 pb-2" id="tweet-form{{ id }}">
     <div class="user-avatar" id="user-avatar">
-        <a href="{% url 'user_profile:profile_tweets' request.user.username %}">
-            <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+        <a href="{{ request.user.get_absolute_url }}">
+            <img src="{{ request.user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
         </a>
     </div>
     <div class="form-body flex-fill" id="form-body{{ id }}">

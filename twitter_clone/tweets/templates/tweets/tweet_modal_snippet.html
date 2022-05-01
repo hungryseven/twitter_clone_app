@@ -6,20 +6,22 @@
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <!-- Если в функцию не передается объект твита, то рендерится форма для создания корневого твита,
+                    в противном случае рендерится форма для ответа на переданный в функцию твит -->
                 {% if not tweet %}
                     {% render_tweet_form %}
                 {% else %}
                     <div class="modal-tweet d-flex flex-row px-3 pt-3 pb-2" id="tweet{{ tweet.id }}">
-                        <div class="modal-user-avatar" id="modal-user-avatar{{ tweet.id }}">
-                            <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}">
-                                <img src="https://github.com/mdo.png" alt="" width="50" height="50" class="rounded-circle me-3">
+                        <div class="user-avatar" id="modal-user-avatar{{ tweet.id }}">
+                            <a href="{{ tweet.user.get_absolute_url }}">
+                                <img src="{{ tweet.user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
                             </a>
                         </div>
                         <div class="modal-tweet-body flex-fill" id="modal-tweet-body{{ tweet.id }}">
                             <div class="modal-tweet-body-top d-flex flex-row" id="modal-tweet-body-top{{ tweet.id }}">
                                 <div class="tweet-usernames" id="tweet-usernames{{ tweet.id }}">
-                                    <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}" class="profile-name link-dark fw-bold">{{ tweet.user.profile_name }}</a>
-                                    <a href="{% url 'user_profile:profile_tweets' tweet.user.username %}" class="username text-muted text-decoration-none">{{ tweet.user.username|at }}</a>
+                                    <a href="{{ tweet.user.get_absolute_url }}" class="profile-name link-dark fw-bold">{{ tweet.user.profile_name }}</a>
+                                    <a href="{{ tweet.user.get_absolute_url }}" class="username text-muted text-decoration-none">{{ tweet.user.username|at }}</a>
                                 </div>
                                 <div class="dividing-point px-1">
                                     <span>·</span>
