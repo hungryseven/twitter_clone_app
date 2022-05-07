@@ -3,9 +3,11 @@
 
 <div class="user-card d-flex flex-row pt-2 pb-3 px-3" id="user-card{{ user.pk }}">
     <div class="user-avatar" id="user-avatar{{ user.pk }}">
-        <a href="{{ user.get_absolute_url }}">
-            <img src="{{ user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
-        </a>
+        <div class="thumbnail-photo">
+            <a href="{{ user.get_absolute_url }}">
+                <img src="{{ user.profile_photo.url }}" alt="" width="50" height="50" class="rounded-circle">
+            </a>
+        </div>
     </div>
     <div class="user-card-body flex-fill" id="user-card-body{{ user.pk }}">
         <div class="card-body-top d-flex align-items-center">

@@ -34,9 +34,13 @@ class ProfileDataMixin(DataMixin):
         Возвращает пересечение подписчиков данного и текущего пользователей,
         т.е. тех пользователей, на которых подписаны оба.
         '''
-        profile_owner_followers = self.user.followers.all().prefetch_related('followees')
-        current_user_followers = self.request.user.followers.all().prefetch_related('followees')
-        return profile_owner_followers.intersection(current_user_followers)
+        # Находим всех подписчиков пользователя, на странице которого находится текущий авторизованный.
+        # Затем находим всех совпадающих подписчиков текущего авторизованного пользователя и
+        # владельца страницы, на которой он находится, отсортированных по времени добавления
+        # текущего авторизованного пользователя в читаемое.
+        profile_owner_followers = self.user.followers.all()
+        return CustomUser.objects.filter(followees=self.request.user, pk__in=profile_owner_followers). \
+                                    order_by('-followee_set__timestamp').prefetch_related('followees')
 
 class UserFollowMixin(M2MEditMixin):
     '''
@@ -46,7 +50,7 @@ class UserFollowMixin(M2MEditMixin):
     '''
 
     def post(self, request, *args, **kwargs):
-        user_id = json.load(self.request)['user_id']
+        user_id = json.load(request)['user_id']
 
         # Проверяем, существует ли объект с таким id.
         # Если нет, то выкидываем ошибку и возвращаем ответ.

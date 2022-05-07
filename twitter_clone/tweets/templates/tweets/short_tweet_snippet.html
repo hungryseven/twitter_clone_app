@@ -16,9 +16,11 @@
                 </svg>
             </div>
         {% endif %}
-        <a href="{{ tweet.user.get_absolute_url }}">
-            <img src="{{ tweet.user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
-        </a>
+        <div class="thumbnail-photo">
+            <a href="{{ tweet.user.get_absolute_url }}">
+                <img src="{{ tweet.user.profile_photo.url }}" width="50" height="50" class="rounded-circle">
+            </a>
+        </div>
     </div>
 
     <!-- Блок со всем телом твита -->

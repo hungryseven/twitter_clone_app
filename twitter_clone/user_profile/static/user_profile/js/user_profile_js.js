@@ -1,6 +1,12 @@
-import {getCookie} from "../../../../static/js/csrftoken.js";
+import {getCookie} from "/static/js/csrftoken.js";
+import {createError, redirectToLogin} from "/static/js/fetch_utils.js";
+import {onModalOpen, onModalClose, openModalAfterRefresh} from "/static/js/modal_utils.js";
 
 const csrftoken = getCookie('csrftoken');
+
+onModalOpen('UpdateProfileModal');
+onModalClose('UpdateProfileModal');
+openModalAfterRefresh('UpdateProfileModal');
 
 /* Добавляем класс 'active' тому элементу навигации, ссылка которого совпадает с текущей,
 чтобы выделить выбранный пункт навигационной панели.
@@ -38,9 +44,9 @@ for (let follow_btn of follow_btns) {
                 .then(response => {
                     if (response.ok) {
                         return response.json();
-                    }
+                    };
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
                     })
                 })
@@ -48,7 +54,10 @@ for (let follow_btn of follow_btns) {
                     this.classList.remove('followed');
                     this.innerHTML = 'Читать';
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         } else {
             fetch('/friendship/create/', {
                 method: 'POST',
@@ -62,9 +71,9 @@ for (let follow_btn of follow_btns) {
                 .then(response => {
                     if (response.ok) {
                         return response.json();
-                    }
+                    };
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
                     })
                 })
@@ -72,7 +81,10 @@ for (let follow_btn of follow_btns) {
                     this.classList.add('followed');
                     this.innerHTML = 'Читаемые';
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         }
     });
 };
@@ -148,12 +160,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             // Если нет ключа в объекте, то прекращаем выполнение функции
-            if (!!data.folowees == false) {
+            if (!!data.followees == false) {
                 return
             };
             
-            for (let folowee_id of data.folowees) {
-                let follow_btn = document.getElementById(`follow-btn${folowee_id}`);
+            for (let followee_id of data.followees) {
+                let follow_btn = document.getElementById(`follow-btn${followee_id}`);
                 if (!!follow_btn) {
                     follow_btn.classList.add('followed');
                     follow_btn.innerHTML = 'Читаемые';

@@ -10,10 +10,10 @@ class TweetForm(CustomModelForm):
         required=False,
         widget=forms.HiddenInput
     )
-    text = forms.CharField(
-        widget=forms.Textarea
-    )
     
     class Meta:
         model = Tweet
         fields = ('text',)
+        widgets = {
+            'text': forms.Textarea(),
+        }

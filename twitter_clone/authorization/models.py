@@ -41,7 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     about = models.CharField(max_length=160, blank=True, verbose_name='О себе')
     location = models.CharField(max_length=30, blank=True, verbose_name='Местоположение')
     website = models.URLField(max_length=100, blank=True, verbose_name='Веб-сайт')
-    profile_photo = models.ImageField(upload_to=get_profile_photo_path, blank=True, default=f'photos/default.png/', verbose_name='Фото профиля')
+    profile_photo = models.ImageField(upload_to=get_profile_photo_path, blank=True, default='photos/default.png/', verbose_name='Фото профиля')
     followers = models.ManyToManyField('self', blank=True, related_name='followees', symmetrical=False, through='UserFollow')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -71,9 +71,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return reverse('user_profile:profile_tweets', kwargs={'username': self.username})
-
-    def get_profile_photo(self):
-        return f'{settings.MEDIA_URL}{self.profile_photo}'
 
 class FooterLinks(models.Model):    
     '''Класс, представляющий модель таблицы БД с ссылками на оригинальную документацию и доп. сервисы твиттера в футере'''

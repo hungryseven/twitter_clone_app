@@ -32,10 +32,10 @@ def render_profile_header(context, profile_owner, current_user):
     return var_dict
 
 @register.inclusion_tag('user_profile/_update_form_modal_snippet.html')
-def render_profile_modal(current_user, form):
+def render_profile_modal(current_user, profile_form):
     '''Рендерит модальное окно с формой апдейта профиля пользователя.'''
     return {
-        'profile_form': form,
+        'profile_form': profile_form,
         'current_user': current_user
     }
 

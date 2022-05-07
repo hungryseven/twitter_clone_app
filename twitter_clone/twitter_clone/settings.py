@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'mptt',
     'widget_tweaks',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [

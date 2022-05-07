@@ -1,4 +1,8 @@
+from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpResponseRedirect
+from django.shortcuts import resolve_url
+
 from braces.views import JSONResponseMixin
 
 from tweets.forms import TweetForm
@@ -54,3 +58,33 @@ class M2MEditMixin(JSONResponseMixin):
     def get_quantity(self):
         '''Возвращает количество пользователей для найденного атрибута экземпляра класса модели.'''
         return self.model_field.count()
+
+class SimpleLoginRequiredMixin(AccessMixin):
+    '''
+    Проверяет, авторизован ли пользователь.
+    Если нет - перенаправляет на страницу логина без "next" параметра.
+    '''
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            resolved_login_url = resolve_url(self.get_login_url())
+            return HttpResponseRedirect(resolved_login_url)
+        return super().dispatch(request, *args, **kwargs)
+
+class SimpleLoginRequiredAjaxMixin(AccessMixin):
+    '''
+    Проверяет, авторизован ли пользователь. Если нет - отправляет ответ в формате JSON 
+    с соответствующей ошибкой и данными.
+    '''
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            resolved_login_url = resolve_url(self.get_login_url())
+            return self.render_json_response(
+                {
+                    'error': 'Неавторизованный пользователь',
+                    'login_url': resolved_login_url
+                }, 
+                status=401
+            )
+        return super().dispatch(request, *args, **kwargs)

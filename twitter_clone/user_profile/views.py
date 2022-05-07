@@ -1,3 +1,4 @@
+from urllib import request
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, View
@@ -6,15 +7,19 @@ from django.db.models import F
 
 from braces.views import JSONResponseMixin
 
-from utils.mixins import LoginRequiredAjaxMixin
+from utils.mixins import SimpleLoginRequiredMixin, SimpleLoginRequiredAjaxMixin
 from .utils import ProfileDataMixin, UserFollowMixin
 from .forms import UpdateProfileForm
+from authorization.models import CustomUser
 from tweets.models import Tweet
 
 # Create your views here.
 
 class ProfileTweetsView(ProfileDataMixin, ListView):
-    '''Отображает корневые твиты(не являющиеся ответами на другие) и ретвиты пользователя.'''
+    '''
+    Отображает корневые твиты(не являющиеся ответами на другие) и ретвиты пользователя
+    в порядке от недавнего к самому старому.
+    '''
 
     template_name = 'user_profile/profile_tweets.html'
     context_object_name = 'root_tweets'
@@ -36,8 +41,11 @@ class ProfileTweetsView(ProfileDataMixin, ListView):
         context['title'] = f'{self.user.profile_name} (@{self.user.username})'
         return context
 
-class ProfileRepliesView(ProfileDataMixin, ListView):
-    '''Отображает твиты пользователя, которые ялвяются ответами на другие.'''
+class ProfileRepliesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
+    '''
+    Отображает твиты пользователя, которые ялвяются ответами на другие,
+    в порядке от недавнего к самому старому.
+    '''
 
     template_name = 'user_profile/profile_replies.html'
     context_object_name = 'replies'
@@ -55,8 +63,11 @@ class ProfileRepliesView(ProfileDataMixin, ListView):
 class ProfileMediaView(ProfileDataMixin, ListView):
     pass
 
-class ProfileLikesView(ProfileDataMixin, ListView):
-    '''Отображает твиты, которым текущий пользователь поставил лайк.'''
+class ProfileLikesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
+    '''
+    Отображает твиты, которым текущий пользователь поставил лайк,
+    в порядке от недавнего к самому старому. 
+    '''
 
     template_name = 'user_profile/profile_likes.html'
     context_object_name = 'likes'
@@ -71,7 +82,7 @@ class ProfileLikesView(ProfileDataMixin, ListView):
         context['title'] = f'Твиты, которые нравятся {self.user.profile_name} (@{self.user.username})'
         return context
 
-class UpdateProfileView(JSONResponseMixin, BaseUpdateView):
+class UpdateProfileView(BaseUpdateView):
     '''Обрабатывает форму и обновляет информацию о пользователе в профиле.'''
 
     form_class = UpdateProfileForm
@@ -80,44 +91,56 @@ class UpdateProfileView(JSONResponseMixin, BaseUpdateView):
         return self.request.user
 
     def get_success_url(self):
-        '''После успешного обновления информации в профиле, перенаправляет на страницу, с которой он был создан.'''
+        '''После успешного обновления информации в профиле, перенаправляет на страницу, с которой она была обновлена.'''
         return self.request.META.get('HTTP_REFERER', '/')
 
     def form_invalid(self, form):
         return HttpResponseRedirect(self.get_success_url())
 
-class FollowersView(ProfileDataMixin, ListView):
-    '''Отображает всех подписчиков данного пользователя.'''
+class FollowersView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
+    '''
+    Отображает всех подписчиков данного пользователя в порядке добавления
+    текущего пользователя в читаемое(от последнего подписавшегося до
+    самого первого).
+    '''
     
     template_name = 'user_profile/followers.html'
     context_object_name = 'followers'
 
     def get_queryset(self):
         self.user = self.get_user()
-        return self.user.followers.all().prefetch_related('followees')
+        return CustomUser.objects.filter(followees=self.user).order_by('-followee_set__timestamp').prefetch_related('followees')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Люди, которые читают {self.user.profile_name} (@{self.user.username})'
         return context
 
-class FollowingView(ProfileDataMixin, ListView):
-    '''Отображает всех пользователей, на которых подписан данный пользователь.'''
+class FollowingView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
+    '''
+    Отображает всех пользователей, на которых подписан данный пользователь,
+    в порядке добавления их текущим пользователем в читаемое(от последней подписки до
+    самой первой).
+    '''
     
     template_name = 'user_profile/followees.html'
     context_object_name = 'followees'
 
     def get_queryset(self):
         self.user = self.get_user()
-        return self.user.followees.all().prefetch_related('followees')
+        return CustomUser.objects.filter(followers=self.user).order_by('-follower_set__timestamp').prefetch_related('followees')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Люди, которых читает {self.user.profile_name} (@{self.user.username})'
         return context
 
-class FollowersYouFollowView(ProfileDataMixin, ListView):
-    '''Отображает подписчиков данного пользователя, на которых подписан текущий пользователь, если они есть.'''
+class FollowersYouFollowView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
+    '''
+    Отображает подписчиков данного пользователя, на которых подписан текущий пользователь(пересечение подписчиков),
+    если они есть. Отображает их в в порядке добавления текущего пользователя в читаемое(от последнего подписавшегося до
+    самого первого).
+    '''
 
     template_name = 'user_profile/followers_user_follow.html'
     context_object_name = 'familiar_followers'
@@ -139,14 +162,20 @@ class FollowersYouFollowView(ProfileDataMixin, ListView):
         context['title'] = f'Ваши знакомые, которые читают пользователя {self.user.profile_name} (@{self.user.username})'
         return context
 
-class FollowUserView(UserFollowMixin, View):
-    '''Обрабатывает добавление пользователя в отслеживаемое(подписки) текущего пользователя.'''
+class FollowUserView(SimpleLoginRequiredAjaxMixin, UserFollowMixin, View):
+    '''
+    Обрабатывает добавление пользователя в отслеживаемое(подписки)
+    текущего авторизованного пользователя.
+    '''
 
     field = 'followees'
     action = 'add'
 
-class UnfollowUserView(UserFollowMixin, View):
-    '''Обрабатывает удаление пользователя из отслеживаемого(подпискок) текущего пользователя.'''
+class UnfollowUserView(SimpleLoginRequiredAjaxMixin, UserFollowMixin, View):
+    '''
+    Обрабатывает удаление пользователя из отслеживаемого(подпискок)
+    текущего авторизованного пользователя.
+    '''
 
     field = 'followees'
     action = 'remove'
@@ -160,9 +189,9 @@ class UserFollowApiView(JSONResponseMixin, View):
     def get(self, request, *args, **kwargs):
         user = request.user
         if user.is_authenticated:
-            folowees = [user.id for user in user.followees.all()]
+            followees = [user.id for user in user.followees.all()]
             context_dict = {
-                'folowees': folowees
+                'followees': followees
             }
             return self.render_json_response(context_dict)
         return self.render_json_response({'user': str(user)})

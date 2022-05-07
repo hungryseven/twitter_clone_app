@@ -2,9 +2,11 @@
 
 <div class="tweet-form d-flex flex-row px-3 pt-3 pb-2" id="tweet-form{{ id }}">
     <div class="user-avatar" id="user-avatar">
-        <a href="{{ request.user.get_absolute_url }}">
-            <img src="{{ request.user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
-        </a>
+        <div class="thumbnail-photo">
+            <a href="{{ request.user.get_absolute_url }}" class="tweet-photo">
+                <img src="{{ request.user.profile_photo.url }}" alt="" width="50" height="50" class="rounded-circle">
+            </a>
+        </div>
     </div>
     <div class="form-body flex-fill" id="form-body{{ id }}">
         <form action="{% url 'tweets:make_tweet' %}" method="post" novalidate>

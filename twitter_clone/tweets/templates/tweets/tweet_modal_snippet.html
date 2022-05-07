@@ -13,9 +13,11 @@
                 {% else %}
                     <div class="modal-tweet d-flex flex-row px-3 pt-3 pb-2" id="tweet{{ tweet.id }}">
                         <div class="user-avatar" id="modal-user-avatar{{ tweet.id }}">
-                            <a href="{{ tweet.user.get_absolute_url }}">
-                                <img src="{{ tweet.user.get_profile_photo }}" alt="" width="50" height="50" class="rounded-circle">
-                            </a>
+                            <div class="thumbnail-photo">
+                                <a href="{{ tweet.user.get_absolute_url }}" class="tweet-photo">
+                                    <img src="{{ tweet.user.profile_photo.url }}" alt="" width="50" height="50" class="rounded-circle">
+                                </a>
+                            </div>
                         </div>
                         <div class="modal-tweet-body flex-fill" id="modal-tweet-body{{ tweet.id }}">
                             <div class="modal-tweet-body-top d-flex flex-row" id="modal-tweet-body-top{{ tweet.id }}">
