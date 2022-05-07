@@ -10,7 +10,7 @@ from braces.views import JSONResponseMixin
 from .models import Tweet
 from .forms import TweetForm
 from .utils import TweetActionsMixin
-from utils.mixins import DataMixin
+from utils.mixins import DataMixin, SimpleLoginRequiredAjaxMixin
 from authorization.models import CustomUser
 
 class DetailtTweetView(DataMixin, SingleObjectMixin, ListView):
@@ -74,36 +74,36 @@ class MakeTweetView(BaseCreateView):
     def form_invalid(self, form):
         return HttpResponseRedirect(self.get_success_url())
 
-class LikeTweetView(TweetActionsMixin, View):
-    '''Обрабатывает лайк определенного твита для текущего пользователя.'''
+class LikeTweetView(SimpleLoginRequiredAjaxMixin, TweetActionsMixin, View):
+    '''Обрабатывает лайк определенного твита для авторизованного текущего авторизованного пользователя.'''
 
     field = 'likes'
     action = 'add'
     calculate_quantity = True
 
-class DislikeTweetView(TweetActionsMixin, View):
-    '''Обрабатывает дизлайк/отмену лайка определенного твита для текущего пользователя.'''
+class DislikeTweetView(SimpleLoginRequiredAjaxMixin, TweetActionsMixin, View):
+    '''Обрабатывает дизлайк/отмену лайка определенного твита для текущего авторизованного пользователя.'''
 
     field = 'likes'
     action = 'remove'
     calculate_quantity = True
 
-class RetweetView(TweetActionsMixin, View):
-    '''Обрабатывает ретвит определенного твита для текущего пользователя.'''
+class RetweetView(SimpleLoginRequiredAjaxMixin, TweetActionsMixin, View):
+    '''Обрабатывает ретвит определенного твита для текущего авторизованного пользователя.'''
 
     field = 'retweets'
     action = 'add'
     calculate_quantity = True
 
-class CancelRetweetView(TweetActionsMixin, View):
-    '''Обрабатывает отмену ретвита определенного твита для текущего пользователя.'''
+class CancelRetweetView(SimpleLoginRequiredAjaxMixin, TweetActionsMixin, View):
+    '''Обрабатывает отмену ретвита определенного твита для текущего авторизованного пользователя.'''
 
     field = 'retweets'
     action = 'remove'
     calculate_quantity = True
 
-class AddTweetToBookmarksView(TweetActionsMixin, View):
-    '''Обрабатывает добавление определенного твита в закладки для текущего пользователя.'''
+class AddTweetToBookmarksView(SimpleLoginRequiredAjaxMixin, TweetActionsMixin, View):
+    '''Обрабатывает добавление определенного твита в закладки для текущего авторизованного пользователя.'''
 
     field = 'bookmarks'
     action = 'add'
@@ -112,8 +112,8 @@ class AddTweetToBookmarksView(TweetActionsMixin, View):
         'success_message': 'Твит добавлен в закладки'
     }
 
-class DeleteTweetFromBookmarksView(TweetActionsMixin, View):
-    '''Обрабатывает удаление определенного твита из закладок для текущего пользователя.'''
+class DeleteTweetFromBookmarksView(SimpleLoginRequiredAjaxMixin, TweetActionsMixin, View):
+    '''Обрабатывает удаление определенного твита из закладок для текущего авторизованного пользователя.'''
     
     field = 'bookmarks'
     action = 'remove'
@@ -124,8 +124,8 @@ class DeleteTweetFromBookmarksView(TweetActionsMixin, View):
 
 class UserActionsApiView(JSONResponseMixin, View):
     '''
-    Получает id всех лайкнутых/ретвитнутых/добавленных в закладки твитах для текущего пользователя
-    и возвращает ответ в формате json.
+    Получает id всех лайкнутых/ретвитнутых/добавленных в закладки твитах 
+    для текущего авторизованного пользователя и возвращает ответ в формате json.
     '''
 
     def get(self, request, *args, **kwargs):

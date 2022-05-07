@@ -1,4 +1,5 @@
-import {getCookie} from "../../../../static/js/csrftoken.js";
+import {getCookie} from "/static/js/csrftoken.js";
+import {createError, redirectToLogin} from "/static/js/fetch_utils.js";
 
 const csrftoken = getCookie('csrftoken');
 
@@ -68,11 +69,11 @@ for (let like_btn of like_btns) {
                 .then(response => {
                     if (response.ok) {
                         return response.json();
-                    }
+                    };
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     // Устанавливаем новое количество лайков на посте.
@@ -89,7 +90,10 @@ for (let like_btn of like_btns) {
                     svg.setAttribute('fill', 'CurrentColor');
                     svg_path.setAttribute('d', likes_svg.not_like);
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         } else {
             fetch('/like/tweet/', {
                 method: 'POST',
@@ -103,11 +107,11 @@ for (let like_btn of like_btns) {
                 .then(response => {
                     if (response.ok) {
                         return response.json();
-                    }
+                    };
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     // Устанавливаем новое количество лайков на посте.
@@ -120,7 +124,10 @@ for (let like_btn of like_btns) {
                     svg.setAttribute('fill', 'rgb(249, 24, 128)');
                     svg_path.setAttribute('d', likes_svg.like);
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         };
     });
 };
@@ -157,11 +164,11 @@ for (let retweet_btn of retweet_btns) {
                 .then(response => {
                     if (response.ok) {
                         return response.json();
-                    }
+                    };
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     // Устанавливаем новое количество ретвитов на посте.
@@ -178,7 +185,10 @@ for (let retweet_btn of retweet_btns) {
                     svg.setAttribute('fill', 'CurrentColor');
                     svg_path.setAttribute('d', retweets_svg.not_retweet);
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         } else {
             fetch('/retweet/tweet/', {
                 method: 'POST',
@@ -192,11 +202,11 @@ for (let retweet_btn of retweet_btns) {
                 .then(response => {
                     if (response.ok) {
                         return response.json();
-                    }
+                    };
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     // Устанавливаем новое количество ретвитов на посте.
@@ -209,7 +219,10 @@ for (let retweet_btn of retweet_btns) {
                     svg.setAttribute('fill', 'rgb(0, 186, 124)');
                     svg_path.setAttribute('d', retweets_svg.retweet);
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         };
     });
 };
@@ -242,9 +255,9 @@ for (let bookmark_btn of bookmark_btns) {
                         return response.json();
                     }
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     // Меняем класс кнопки и ее текст.
@@ -254,7 +267,10 @@ for (let bookmark_btn of bookmark_btns) {
                     toast_text.innerHTML = data.success_message;
                     toast.show();
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         } else {
             fetch('/add-to-bookmarks/tweet/', {
                 method: 'POST',
@@ -268,11 +284,11 @@ for (let bookmark_btn of bookmark_btns) {
                 .then(response => {
                     if (response.ok) {
                         return response.json();
-                    }
+                    };
                     return response.json().then(error => {
-                        let e = new Error(error.error);
+                        let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     // Меняем класс кнопки и ее текст.
@@ -282,7 +298,10 @@ for (let bookmark_btn of bookmark_btns) {
                     toast_text.innerHTML = data.success_message;
                     toast.show();
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    console.error(error.data.error);
+                    redirectToLogin(error.data);
+                });
         };
     });
 };

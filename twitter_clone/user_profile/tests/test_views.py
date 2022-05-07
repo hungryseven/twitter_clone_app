@@ -26,7 +26,13 @@ class ProfileTweetsViewTests(SetUpMixin, TestCase):
         '''Проверяет, что страница доступна по имени url паттерна.'''
         response = self.client.get(reverse('user_profile:profile_tweets', kwargs={'username': self.user1.username}))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.request['PATH_INFO'], '/user1/')
+        self.assertEqual(response.request['PATH_INFO'], f'/{self.user1.username}/')
+
+    def test_view_url_for_non_existent_user(self):
+        '''Проверяет, что страница недоступна, если пользователя не существует.'''
+        response = self.client.get(reverse('user_profile:profile_tweets', kwargs={'username': 'non_existent'}))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.request['PATH_INFO'], '/non_existent/')
 
     def test_view_uses_correct_template(self):
         '''Проверяет, что представление использует нужный шаблон.'''
@@ -518,5 +524,4 @@ class UnfollowUserViewTests(SetUpMixin, TestCase):
         self.assertIn('error', json_response)
 
 class UpdateProfileViewTests(SetUpMixin, TestCase):
-
     pass

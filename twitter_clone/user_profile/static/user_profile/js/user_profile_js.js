@@ -1,12 +1,7 @@
 import {getCookie} from "/static/js/csrftoken.js";
 import {createError, redirectToLogin} from "/static/js/fetch_utils.js";
-import {onModalOpen, onModalClose, openModalAfterRefresh} from "/static/js/modal_utils.js";
 
 const csrftoken = getCookie('csrftoken');
-
-onModalOpen('UpdateProfileModal');
-onModalClose('UpdateProfileModal');
-openModalAfterRefresh('UpdateProfileModal');
 
 /* Добавляем класс 'active' тому элементу навигации, ссылка которого совпадает с текущей,
 чтобы выделить выбранный пункт навигационной панели.
