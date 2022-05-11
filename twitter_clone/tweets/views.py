@@ -39,12 +39,12 @@ class DetailtTweetView(DataMixin, SingleObjectMixin, ListView):
         ancestors = Tweet.objects.filter(
             Q(lft__lte=self.object.lft) & Q(rght__gte=self.object.rght),
             tree_id=self.object.tree_id
-        ).select_related('user').prefetch_related('likes', 'retweets', 'children')
+        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
         childrens = Tweet.objects.filter(
             Q(lft__gt=self.object.lft) & Q(rght__lt=self.object.rght),
             level=self.object.level+1,
             tree_id=self.object.tree_id
-        ).select_related('user').prefetch_related('likes', 'retweets', 'children')
+        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
         return ancestors.union(childrens).order_by('lft')
 
 class MakeTweetView(BaseCreateView):
@@ -75,7 +75,7 @@ class MakeTweetView(BaseCreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 class LikeTweetView(SimpleLoginRequiredAjaxMixin, TweetActionsMixin, View):
-    '''Обрабатывает лайк определенного твита для авторизованного текущего авторизованного пользователя.'''
+    '''Обрабатывает лайк определенного твита для текущего авторизованного пользователя.'''
 
     field = 'likes'
     action = 'add'

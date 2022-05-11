@@ -12,6 +12,10 @@ class DataMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        # Количество непрочитынных текущим авторизованным пользователем уведомлений.
+        context['unread_notifications'] = user.notifications.filter(usernotification__is_viewed=False). \
+                                                exclude(user=user).count()
         context['tweet_form'] = TweetForm()
         return context
 

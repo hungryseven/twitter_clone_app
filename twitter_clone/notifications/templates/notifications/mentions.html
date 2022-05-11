@@ -1,0 +1,27 @@
+{% extends 'main_app/base_main_app.html' %}
+{% load tweets_template_utils %}
+{% load static %}
+
+{% block extra_static %}
+    {{ block.super }}
+    <link type="text/css" href="{% static 'notifications/css/notifications_styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block upper_content %}
+    <div class="mentions-header px-3 p t-3 pb-3 border-bottom">
+        <div class="header-name">
+            <span>Уведомления</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main_content %}
+    <div class="mentions-container">
+        {% for mention in mentions %}
+            <div class="user-mention" id="user-mention{{ mention.pk }}">
+                {% render_short_tweet mention %}
+                {% include 'tweets/tweet_modal_snippet.html' with tweet=mention %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

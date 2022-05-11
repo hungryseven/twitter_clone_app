@@ -5,7 +5,7 @@
 {% block main_content %}
     <div class="tweets-container">
         {% for tweet in replies %}
-            <div class="profile-replies" id="profile-replies{{ tweet.id }}">
+            <div class="profile-replies" id="profile-replies{{ tweet.pk }}">
                 {% render_short_tweet tweet %}
                 {% include 'tweets/tweet_modal_snippet.html' with tweet=tweet %}
             </div>

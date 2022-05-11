@@ -12,6 +12,12 @@ def get_profile_photo_path(instance, filename):
     '''Возвращает путь для загрузки фото профиля пользователя.'''
     return f'photos/{instance.username}/{filename}'
 
+class UserNotification(models.Model):
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    tweet = models.ForeignKey('tweets.Tweet', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField()
+    is_viewed = models.BooleanField(default=False)
+
 class UserFollow(models.Model):
     followee = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='follower_set') # Тот, на кого подписались
     follower = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='followee_set') # Тот, кто подписался
@@ -43,6 +49,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     website = models.URLField(max_length=100, blank=True, verbose_name='Веб-сайт')
     profile_photo = models.ImageField(upload_to=get_profile_photo_path, blank=True, default='photos/default.png/', verbose_name='Фото профиля')
     followers = models.ManyToManyField('self', blank=True, related_name='followees', symmetrical=False, through='UserFollow')
+    notifications = models.ManyToManyField('tweets.Tweet', blank=True, related_name='mentioned_users', through='UserNotification')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')

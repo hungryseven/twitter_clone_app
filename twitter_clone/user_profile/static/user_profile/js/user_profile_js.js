@@ -43,7 +43,7 @@ for (let follow_btn of follow_btns) {
                     return response.json().then(error => {
                         let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     this.classList.remove('followed');
@@ -70,7 +70,7 @@ for (let follow_btn of follow_btns) {
                     return response.json().then(error => {
                         let e = createError(response, error);
                         throw e;
-                    })
+                    });
                 })
                 .then(data => {
                     this.classList.add('followed');

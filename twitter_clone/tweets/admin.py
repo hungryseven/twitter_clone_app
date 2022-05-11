@@ -10,7 +10,7 @@ from .models import Tweet
 
 class TweetAdmin(DraggableMPTTAdmin):
     formfield_overrides = {
-        models.CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 60})},
+        models.CharField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
     }
 
     list_display = ('tree_actions', 'indented_title', 'user', 'pub_date', 'parent')

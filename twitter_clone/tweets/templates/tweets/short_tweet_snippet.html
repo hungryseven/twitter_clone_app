@@ -50,7 +50,7 @@
         <!-- Блок с контентом твита(текст, фотографии и т.д.) -->
         <div class="tweet-content" id="tweet-content{{ tweet.id }}">
             <div class="tweet-text fs-6" id="tweet-text{{ tweet.id }}">
-                {{ tweet.text|linebreaks }}
+                {% replace_usernames_with_links text=tweet.text|linebreaksbr tweet=tweet %}
             </div>
         </div>
 

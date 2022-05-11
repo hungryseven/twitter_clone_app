@@ -1,4 +1,5 @@
 {% load main_template_utils %}
+{% load tweets_template_utils %}
 
 <div class="detail-tweet px-3 pt-3" id="detail-tweet{{ detail_tweet.id }}">
 
@@ -20,7 +21,7 @@
     <!-- Блок с контентом твита(текст, фотографии и т.д.) -->
     <div class="detail-tweet-content mb-3" id="detail-tweet-content{{ detail_tweet.id }}" style="z-index: 100;">
         <div class="tweet-text fs-4" id="tweet-text{{ detail_tweet.id }}">
-            {{ detail_tweet.text|linebreaks }}
+            {% replace_usernames_with_links text=detail_tweet.text|linebreaksbr tweet=detail_tweet %}
         </div>
     </div>
 

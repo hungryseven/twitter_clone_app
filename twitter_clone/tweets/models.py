@@ -3,6 +3,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.conf import settings
 from django.urls import reverse
 
+from authorization.models import CustomUser
+
 # Create your models here.
 
 User = settings.AUTH_USER_MODEL
@@ -42,8 +44,22 @@ class Tweet(MPTTModel):
         verbose_name_plural = 'Твиты'
         ordering = ('id',)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if '@' in self.text:
+            text_parts = self.text.split()
+            for i, part in enumerate(text_parts, 0):
+                if 5 <= len(part) <= 16 and '@' in part:
+                    try:
+                        user = CustomUser.objects.get(username=part[1:])
+                        user.notifications.add(self, through_defaults={'timestamp': self.pub_date})
+                    except CustomUser.DoesNotExist:
+                        continue
+
     def __str__(self):
-        return self.text[:51] + '...'
+        if len(self.text) > 50:
+            return self.text[:51] + '...'
+        return self.text
 
     def get_absolute_url(self):
         return reverse('tweets:detail_tweet', kwargs={'username': self.user.username, 'pk': self.pk})

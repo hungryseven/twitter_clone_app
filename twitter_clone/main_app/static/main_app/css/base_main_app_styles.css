@@ -1,3 +1,5 @@
+/* LEFT SIDEBAR ITEMS */
+
 .nav-item:hover,
 #dropdownUser:hover {
     background: rgba(15, 20, 25, 0.1);
@@ -21,6 +23,25 @@
     border-color: rgb(26, 144, 218);
 }
 
+.notifications {
+    position: relative;
+}
+
+.unred-notifications {
+    position: absolute;
+    top: 5px;
+    left: 27px;
+    font-size: 11px;
+    font-weight: 400;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background-color: rgb(29, 155, 240);
+    color: rgb(255, 255, 255);
+}
+
+/* FOOTER FOR UNAUTHORIZED */
+
 .footer { 
     background-color: rgb(29, 161, 242);
 }
@@ -38,6 +59,8 @@
     background-color: rgb(221, 228, 228);
 }
 
+/* BLOCKS SIZING */
+
 /* 
 Задается div'y с кнопками в футере, чтобы они растягивались во всю ширину контейнера 
 на маленьких экранах (xs-md breakpoints)
@@ -52,7 +75,7 @@
 }
 
 @media (min-width: 992px) {
-    .w-xxl {width: 245px;}
+    .w-xxl {width: 275px;}
 }
 
 /* Фиксированная ширина в 600px для блока контента при размере экрана > 720px */

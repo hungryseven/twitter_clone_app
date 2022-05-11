@@ -31,9 +31,9 @@ class ProfileTweetsView(ProfileDataMixin, ListView):
         # Вводим новую колонку с временем совершения действия(время создания твита и время ретвита),
         # объединяем запросы и сортируем по этой колонке.
         user_tweets = Tweet.objects.filter(user__username=self.user.username, parent__isnull=True).annotate(action_time=F('pub_date')). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children')
+                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
         user_retweets = self.user.retweeted_tweets.annotate(action_time=F('tweetretweet__timestamp')). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children')
+                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
         return user_tweets.union(user_retweets).order_by('-action_time')
 
     def get_context_data(self, **kwargs):
@@ -53,7 +53,7 @@ class ProfileRepliesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
     def get_queryset(self):
         self.user = self.get_user()
         return Tweet.objects.filter(user__username=self.user.username, parent__isnull=False).order_by('-pub_date'). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children')
+                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,7 +75,7 @@ class ProfileLikesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
     def get_queryset(self):
         self.user = self.get_user()
         return self.user.liked_tweets.order_by('-tweetlike__timestamp'). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children')
+                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

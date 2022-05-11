@@ -5,7 +5,7 @@
 {% block main_content %}
     <div class="tweets-container">
         {% for tweet in root_tweets %}
-            <div class="profile-tweet" id="profile-tweet{{ tweet.id }}">
+            <div class="profile-tweet" id="profile-tweet{{ tweet.pk }}">
                 {% if tweet.user.username != profile_owner.username %}
                     {% render_short_tweet tweet is_retweet=True %}
                 {% else %}
