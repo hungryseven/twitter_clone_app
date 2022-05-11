@@ -9,7 +9,8 @@ from utils.mixins import DataMixin, SimpleLoginRequiredMixin
 class MentionsView(SimpleLoginRequiredMixin, DataMixin, ListView):
     '''
     Отображает все твиты, в которых был упомянут текущий авторизованный пользователь,
-    кроме созданных этим же пользователем.
+    кроме созданных этим же пользователем, в порядке времени от недавнего твита с
+    уведомлением до самого старого.
     '''
 
     template_name = 'notifications/mentions.html'

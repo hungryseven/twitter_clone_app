@@ -1,0 +1,11 @@
+.user-profile-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgb(15, 20, 25);
+}
+
+.user-username {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(83, 100, 113);
+}

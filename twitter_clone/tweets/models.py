@@ -46,9 +46,15 @@ class Tweet(MPTTModel):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+        # После сохранения объекта твита в БД проверяем,
+        # есть ли в его тексте символ "@"
         if '@' in self.text:
             text_parts = self.text.split()
             for i, part in enumerate(text_parts, 0):
+                # Проверяем, что элемент списка содержит символ "@"
+                # и его длина в пределах от 5 до 16 символов, т.к.
+                # длина юзернейма лежит в пределах от 4 до 15 символов.
                 if 5 <= len(part) <= 16 and '@' in part:
                     try:
                         user = CustomUser.objects.get(username=part[1:])

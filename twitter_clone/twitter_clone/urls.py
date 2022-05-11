@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('tweets.urls')),
     path('', include('user_profile.urls')),
     path('', include('notifications.urls')),
+    path('', include('bookmarks.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tweets.apps.TweetsConfig',
     'user_profile.apps.UserProfileConfig',
     'notifications.apps.NotificationsConfig',
+    'bookmarks.apps.BookmarksConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -61,12 +61,12 @@ def replace_usernames_with_links(text, tweet):
     mentioned_users = tweet.mentioned_users.all()
     for user in mentioned_users:
         
-        # Достаем юзернейм пользователя из текста в оригинальном виде,
+        # Достаем юзернейм пользователя из текста в оригинальном виде вместе с символом "@",
         # так как он может быть написан буквами разных регистров.
-        username_in_text = re.search(user.username, text, re.IGNORECASE).group()
+        username_in_text = re.search(rf'@\b{user.username}\b', text, re.IGNORECASE).group()
         text = re.sub(
-            rf'@\b{username_in_text}\b',
-            f'<a href="{user.get_absolute_url()}" class="username-link">@{username_in_text}</a>',
+            rf'@\b{user.username}\b',
+            f'<a href="{user.get_absolute_url()}" class="username-link">{username_in_text}</a>',
             text,
             flags=re.IGNORECASE
         )

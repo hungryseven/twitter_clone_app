@@ -1,0 +1,46 @@
+{% extends 'main_app/base_main_app.html' %}
+{% load main_template_utils %}
+{% load tweets_template_utils %}
+{% load static %}
+
+{% block extra_static %}
+    {{ block.super }}
+    <link type="text/css" href="{% static 'bookmarks/css/bookmarks_styles.css' %}" rel="stylesheet">
+    <script type="module" src="{% static 'bookmarks/js/bookmarks_js.js' %}" defer></script>
+{% endblock %}
+
+{% block upper_content %}
+    <div class="bookmarks-header align-items-center px-3 pt-2 pb-2 border-bottom">
+        <div class="user-nicknames">
+            <div class="user-profile-name">
+                <span>{{ user.profile_name }}</span>
+            </div>
+            <div class="user-username">
+                <span>{{ user.username|at }}</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main_content %}
+    <div class="bookmarks-container">
+        {% for bookmark in bookmarks %}
+            <div class="user-bookmark" id="user-bookmark{{ bookmark.pk }}">
+                {% render_short_tweet bookmark %}
+                {% include 'tweets/tweet_modal_snippet.html' with tweet=bookmark %}
+            </div>
+        {% empty %}
+            <div class="empty-bookmarks text-center py-5 px-5">
+                <div class="head-message">
+                    <span>Сохраняйте твиты на потом</span>
+                </div>
+                <div class="bottom-message">
+                    <span>
+                        Не теряйте из виду хорошие твиты! Добавляйте их в закладки,
+                        чтобы без труда возвращаться к ним в будущем.
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

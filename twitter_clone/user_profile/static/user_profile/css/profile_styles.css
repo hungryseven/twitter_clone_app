@@ -264,18 +264,6 @@
     background-color: rgba(15, 20, 25, 0.1);
 }
 
-.head-message span {
-    color: rgb(15, 20, 25);
-    font-size: 31px;
-    font-weight: 800;
-}
-
-.bottom-message span {
-    color: rgb(83, 100, 113);
-    font-size: 15px;
-    font-weight: 400;
-}
-
 /* FOLLOW CARDS */
 
 .card-profile-name a {

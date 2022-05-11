@@ -42,6 +42,15 @@ class MentionsViewTests(SetUpMixin, TestCase):
         response = self.client.get(reverse('notifications:mentions'))
         self.assertTemplateUsed(response, 'notifications/mentions.html')
 
+    def test_view_without_mentions(self):
+        '''
+        Если текущий авторизованный пользователь не был упомянут
+        в каком-либо твите, то отображается пустая страница.
+        '''
+        login = self.login_user1()
+        response = self.client.get(reverse('notifications:mentions'))
+        self.assertQuerysetEqual(response.context['object_list'], [])
+
     def test_view_with_mentions_in_other_users_tweets_only(self):
         '''
         Если текущий авторизованный пользователь был упомянут в твитах,
@@ -64,7 +73,7 @@ class MentionsViewTests(SetUpMixin, TestCase):
         то отображает только твиты, созданные другими пользователями,
         в порядке их создания от недавнего до самого старого.
         '''
-        # Создаем 3 твита пользователем "user2" и 1 твит пользователем user1 
+        # Создаем 3 твита пользователем "user2" и 1 твит пользователем "user1"
         # с упоминанием "user1" в них
         tweet1 = Tweet.objects.create(text=f'mention1 for @{self.user1.username}', user=self.user2)
         tweet2 = Tweet.objects.create(text=f'mention2 for @{self.user1.username}', user=self.user1)
@@ -81,7 +90,7 @@ class MentionsViewTests(SetUpMixin, TestCase):
         их количество. При переходе на страницу с уведомлениями все непрочитанные уведомления
         получают статус прочитанных.
         '''
-        # Создаем 4 твита пользователем "user2" и 1 твит пользователем user1 
+        # Создаем 4 твита пользователем "user2" и 1 твит пользователем "user1" 
         # с упоминанием "user1" в них
         tweet1 = Tweet.objects.create(text=f'mention1 for @{self.user1.username}', user=self.user2)
         tweet2 = Tweet.objects.create(text=f'mention2 for @{self.user1.username}', user=self.user1)

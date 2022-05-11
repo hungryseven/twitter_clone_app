@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block upper_content %}
-    <div class="mentions-header px-3 p t-3 pb-3 border-bottom">
+    <div class="mentions-header px-3 pt-2 pb-2 border-bottom">
         <div class="header-name">
             <span>Уведомления</span>
         </div>
@@ -21,6 +21,17 @@
             <div class="user-mention" id="user-mention{{ mention.pk }}">
                 {% render_short_tweet mention %}
                 {% include 'tweets/tweet_modal_snippet.html' with tweet=mention %}
+            </div>
+        {% empty %}
+            <div class="empty-mentions text-center py-5 px-5">
+                <div class="head-message">
+                    <span>Пока что нет уведомлений</span>
+                </div>
+                <div class="bottom-message">
+                    <span>
+                        Мы сообщим Вам, когда здесь что-то появится.
+                    </span>
+                </div>
             </div>
         {% endfor %}
     </div>
