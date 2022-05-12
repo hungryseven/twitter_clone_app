@@ -6,8 +6,8 @@ UserModel = get_user_model()
 
 class CustomBackend(ModelBackend):
     '''
-        Класс, представляющий кастомный бэкенд, предоставляющий аутентификацию
-        как через username, так и через email (не чувствительны к регистру)
+    Класс, представляющий кастомный бэкенд, предоставляющий аутентификацию
+    как через username, так и через email (не чувствительны к регистру)
     '''
 
     def authenticate(self, request, username=None, password=None, **kwargs):

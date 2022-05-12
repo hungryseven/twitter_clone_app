@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
 from django.shortcuts import resolve_url
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from braces.views import JSONResponseMixin
 
@@ -92,3 +94,30 @@ class SimpleLoginRequiredAjaxMixin(AccessMixin):
                 status=401
             )
         return super().dispatch(request, *args, **kwargs)
+
+class AdminMixin:
+    '''Миксин для работы с классами админ-панели.'''
+
+    @staticmethod
+    def get_objects(queryset, line_by_line=False):
+        '''
+        Возвращает строку с ссылками на объекты из qs в админ панели.
+
+            params:
+                    queryset (QuerySet): список объектов
+                    line_by_line (Boolean): если True, то выводит объекты построчно,
+                                            если False - через запятую.
+
+            return value:
+                    строка (str): строка с объектами, являющиеся ссылками
+        '''
+        object_list = []
+        for obj in queryset:
+            url = reverse(f'admin:{obj._meta.app_label}_{obj._meta.model_name}_change', args=(obj.pk,))
+            if line_by_line:
+                object_list.append(f'<p><a href="{url}">{obj}</a></p>')
+            else:
+                object_list.append(f'<a href="{url}">{obj}</a>')
+        if line_by_line:
+            return mark_safe(''.join(object_list))
+        return mark_safe(', '.join(object_list))

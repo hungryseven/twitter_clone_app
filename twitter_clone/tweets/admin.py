@@ -1,14 +1,19 @@
 from django.contrib import admin
 from django.db import models
-from django.urls import reverse
-from django.utils.safestring import mark_safe
 from django.forms.widgets import Textarea
+
 from mptt.admin import DraggableMPTTAdmin
+
 from .models import Tweet
+from utils.mixins import AdminMixin
 
 # Register your models here.
 
-class TweetAdmin(DraggableMPTTAdmin):
+class TweetAdmin(AdminMixin, DraggableMPTTAdmin):
+    '''
+    Класс, представляющий админ-панель для модели твитов.
+    '''
+
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
     }
@@ -23,23 +28,28 @@ class TweetAdmin(DraggableMPTTAdmin):
     fieldsets = (
         (None, {
             'fields': ('text', 'user', 'parent'),
-        }),
+            }
+        ),
         ('Ответы на текущий твит', {
             'classes': ('collapse',),
             'fields': ('replies_count', 'get_replies'),
-        }),
+            }
+        ),
         ('Лайки', {
             'classes': ('collapse',),
             'fields': ('likes_count', 'get_likes'),
-        }),
+            }
+        ),
         ('Ретвиты', {
             'classes': ('collapse',),
             'fields': ('retweets_count', 'get_retweets'),
-        }),
+            }
+        ),
         ('Закладки', {
             'classes': ('collapse',),
             'fields': ('bookmarks_count', 'get_bookmarks'),
-        }),
+            }
+        ),
     )
 
     def get_queryset(self, request):
@@ -69,34 +79,21 @@ class TweetAdmin(DraggableMPTTAdmin):
     @admin.display(description='Ответы')
     def get_replies(self, obj):
         '''Построчно выводит список ссылок на твиты, которые являются ответом на данный.'''
-        replies_list = []
-        for children in obj.children.all():
-            url = reverse(f'admin:{obj._meta.app_label}_{obj._meta.model_name}_change', args=(children.pk,))
-            replies_list.append(f'<p><a href="{url}">{children.text}</a></p>')
-        return mark_safe(''.join(replies_list))
+        return self.get_objects(queryset=obj.children.all(), line_by_line=True)
 
     @admin.display(description='Лайкнувшие пользователи')
     def get_likes(self, obj):
         '''Выводит строку с ссылками на пользователей, которые лайкнули текущий твит.'''
-        return self.get_users(queryset=obj.likes.all())
+        return self.get_objects(queryset=obj.likes.order_by('-tweetlike__timestamp'))
 
     @admin.display(description='Ретвитнувшие пользователи')
     def get_retweets(self, obj):
         '''Выводит строку с ссылками на пользователей, которые ретвитнули текущий твит.'''
-        return self.get_users(queryset=obj.retweets.all())
+        return self.get_objects(queryset=obj.retweets.order_by('-tweetretweet__timestamp'))
 
     @admin.display(description='Добавили в закладки')
     def get_bookmarks(self, obj):
         '''Выводит строку с ссылками на пользователей, которые добавили в закладки текущий твит.'''
-        return self.get_users(queryset=obj.bookmarks.all())
-
-    @staticmethod
-    def get_users(queryset):
-        '''Возвращает строку с ссылками на пользователей в админ панели.'''
-        users_list = []
-        for user in queryset:
-            url = reverse(f'admin:{user._meta.app_label}_{user._meta.model_name}_change', args=(user.pk,))
-            users_list.append(f'<a href="{url}">{user.username}</a>')
-        return mark_safe(', '.join(users_list))
+        return self.get_objects(queryset=obj.bookmarks.order_by('-tweetbookmark__timestamp'))
 
 admin.site.register(Tweet, TweetAdmin)

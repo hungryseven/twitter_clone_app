@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 
 from utils.mixins import DataMixin, SimpleLoginRequiredMixin
 
@@ -6,7 +6,8 @@ from utils.mixins import DataMixin, SimpleLoginRequiredMixin
 
 class BookmarksView(SimpleLoginRequiredMixin, DataMixin, ListView):
     '''
-    Отображает все твиты, которые находятся в закладках у текущего авторизованного пользователя.
+    Отображает все твиты, которые находятся в закладках у текущего авторизованного пользователя,
+    в порядке времени от недавно добавленного в закладки твита до самого старого.
     '''
     
     template_name = 'bookmarks/bookmarks.html'
