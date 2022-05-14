@@ -20,9 +20,6 @@ class MentionsViewTests(SetUpMixin, TestCase):
     кроме созданных этим же пользователем.
     '''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_url_inaccessible_for_unauthorized(self):
         '''Проверяет, что пользователь не авторизован и переводит его на страницу логина.'''
         response = self.client.get(reverse('notifications:mentions'))

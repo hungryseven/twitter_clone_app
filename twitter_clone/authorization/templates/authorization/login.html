@@ -3,6 +3,7 @@
 
 {% block extra_static %}
     <link type="text/css" href="{% static 'authorization/css/styles.css' %}" rel="stylesheet">
+    <script type="module" src="{% static 'authorization/js/auth_js.js' %}" defer></script>
 {% endblock %}
 
 {% block container %}
@@ -30,5 +31,6 @@
                 </div>
             </div>
         </div>
+        {{ block.super }}
     {% endblock %}
 {% endblock %}

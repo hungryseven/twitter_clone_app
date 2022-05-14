@@ -17,7 +17,7 @@ class IndexView(AnonymousRequiredMixin, ListView):
         context['title'] = 'Твиттер. Здесь обсуждают все, что происходит.'
         return context
 
-class RegisterUser(AnonymousRequiredMixin, CreateView):
+class RegisterUserView(AnonymousRequiredMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'authorization/register.html'
     success_url = reverse_lazy('authorization:login')
@@ -27,7 +27,7 @@ class RegisterUser(AnonymousRequiredMixin, CreateView):
         context['title'] = 'Зарегистрироваться в Твиттере.'
         return context
 
-class LoginUser(AnonymousRequiredMixin, LoginView):
+class LoginUserView(AnonymousRequiredMixin, LoginView):
     form_class = LoginUserForm
     template_name = 'authorization/login.html'
 
@@ -36,5 +36,5 @@ class LoginUser(AnonymousRequiredMixin, LoginView):
         context['title'] = 'Вход в Твиттер.'
         return context
 
-class LogoutUser(LogoutView):
+class LogoutUserView(LogoutView):
     pass

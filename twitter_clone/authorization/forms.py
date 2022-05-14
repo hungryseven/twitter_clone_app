@@ -1,7 +1,6 @@
-import re
 from utils.base_forms import CustomModelForm, CustomForm
 from django import forms
-from django.core.exceptions import ValidationError
+from django.forms import TextInput, EmailInput
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import CustomUser
@@ -9,25 +8,22 @@ from .models import CustomUser
 UserModel = get_user_model()
 
 class RegisterUserForm(UserCreationForm, CustomModelForm):
+    
     template_name = 'authorization/form_snippet.html'
 
     error_messages = {
         'password_mismatch': 'Пароли не совпадают.',
     }
-    
+
     username = forms.CharField(
         label='Имя пользователя',
         min_length=4,
-        help_text='Имя пользователя будет использоваться в качестве логина.',
-        widget=forms.TextInput()
-    )
-    email = forms.CharField(
-        label='Адрес электронной почты',
-        widget=forms.EmailInput()
-    )
-    profile_name = forms.CharField(
-        label='Имя профиля',
-        widget=forms.TextInput()
+        max_length=15,
+        error_messages={
+            'min_length': 'Имя пользователя не может быть менее 4 символов.',
+            'max_length': 'Имя пользователя не может быть более 15 символов.'
+        },
+        help_text='Имя пользователя будет использоваться в качестве логина.'
     )
     password1 = forms.CharField(
         label='Пароль',
@@ -38,21 +34,24 @@ class RegisterUserForm(UserCreationForm, CustomModelForm):
         widget=forms.PasswordInput()
     )
 
-    def clean_username(self):
-        '''Проверяет соответствие логина/имени пользователя заданному шаблону'''
-        username = self.cleaned_data.get('username')
-        # Шаблон соответствует строчным и заглавным латинским буквам, цифрам и знаку нижнего подчеркивания
-        pattern = re.compile('^[a-zA-Z0-9_]*$')
-        result = pattern.findall(username)
-        if not result:
-            raise ValidationError("Логин может содержать только латинские буквы, цифры и '_'.", code='invalid')
-        return username
-
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'profile_name', 'password1', 'password2')
+        widgets = {
+            'username': TextInput,
+            'email': EmailInput,
+            'profile_name': TextInput
+        }
+        labels = {
+            'username': 'Имя пользователя',
+            'email': 'Адрес электронной почты'
+        }
+        help_texts = {
+            'username': 'Имя пользователя будет использоваться в качестве логина.',
+        }
 
 class LoginUserForm(AuthenticationForm, CustomForm):
+
     # Переопределяем конструктор, чтобы выставить максимальную длину поля логина в форме 
     # равной максимальной длине email'а, определенной в классе модели юзера (CustomUser),
     # так как с кастомным бэкэндом аутентификации можно логиниться как с username'ом, так и с email'ом

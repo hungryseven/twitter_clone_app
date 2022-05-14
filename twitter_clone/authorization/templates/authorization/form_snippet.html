@@ -1,5 +1,12 @@
 {% load widget_tweaks %}
 
+{% if form.non_field_errors %}
+    <div class="non-field-errors visually-hidden">
+        {% for error in form.non_field_errors %}
+            <span class="non-field-error">{{ error }}</span>
+        {% endfor %}
+    </div>
+{% endif %}
 {% for field in form %}
     <div class="form-floating mb-3">
         {% render_field field class="form-control mb-2" placeholder=field.label %}

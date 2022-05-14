@@ -18,9 +18,6 @@ class SetUpMixin:
 
 class ProfileTweetsViewTests(SetUpMixin, TestCase):
     '''Тесты для представления, в котором отображаются корневые твиты и ретвиты пользователя.'''
-    
-    def setUp(self):
-        return super().setUp()
 
     def test_view_url_accessible_by_name(self):
         '''Проверяет, что страница доступна по имени url паттерна.'''
@@ -89,9 +86,6 @@ class ProfileTweetsViewTests(SetUpMixin, TestCase):
 class ProfileRepliesViewTests(SetUpMixin, TestCase):
     '''Тесты для представления, в котором отображаются только ответы на другие твиты пользователя.'''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_url_inaccessible_for_unauthorized(self):
         '''Проверяет, что пользователь не авторизован и переводит его на страницу логина.'''
         response = self.client.get(reverse('user_profile:profile_replies', kwargs={'username': self.user1.username}))
@@ -132,9 +126,6 @@ class ProfileRepliesViewTests(SetUpMixin, TestCase):
 class ProfileLikesViewTests(SetUpMixin, TestCase):
     '''Тесты для представления, в котором отображаются только лайкнутые твиты пользователя.'''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_url_inaccessible_for_unauthorized(self):
         '''Проверяет, что пользователь не авторизован и редиректит его на страницу логина.'''
         response = self.client.get(reverse('user_profile:profile_likes', kwargs={'username': self.user1.username}))
@@ -174,9 +165,6 @@ class ProfileLikesViewTests(SetUpMixin, TestCase):
 
 class FollowersViewTests(SetUpMixin, TestCase):
     '''Тесты для представления, в котором отображаются подписчики(читатели) пользователя.'''
-
-    def setUp(self):
-        return super().setUp()
 
     def test_view_url_inaccessible_for_unauthorized(self):
         '''Проверяет, что пользователь не авторизован и редиректит его на страницу логина.'''
@@ -222,9 +210,6 @@ class FollowersViewTests(SetUpMixin, TestCase):
 
 class FollowingViewTests(SetUpMixin, TestCase):
     '''Тесты для представления, в котором отображаются подписки(читаемое) пользователя.'''
-
-    def setUp(self):
-        return super().setUp()
 
     def test_view_url_inaccessible_for_unauthorized(self):
         '''Проверяет, что пользователь не авторизован и редиректит его на страницу логина.'''
@@ -340,9 +325,6 @@ class UserFollowApiViewTests(SetUpMixin, TestCase):
     с подписками(читаемым) текущего авторизованного пользователя.
     '''
     
-    def setUp(self):
-        return super().setUp()
-    
     def test_view_url_accessible_by_name(self):
         '''Проверяет, что страница доступна по имени url паттерна.'''
         response = self.client.get(reverse('user_profile:follow_api'))
@@ -377,9 +359,6 @@ class FollowUserViewTests(SetUpMixin, TestCase):
     Тесты для представления, которое обрабатывает добавление пользователя 
     в отслеживаемое(подписки) текущего авторизованного пользователя.
     '''
-
-    def setUp(self):
-        return super().setUp()
     
     def test_view_for_unauthorized(self):
         '''
@@ -452,9 +431,6 @@ class UnfollowUserViewTests(SetUpMixin, TestCase):
     Тесты для представления, которое обрабатывает удаление пользователя 
     из отслеживаемого(подписок) текущего авторизованного пользователя.
     '''
-    
-    def setUp(self):
-        return super().setUp()
 
     def test_view_for_unauthorized(self):
         '''

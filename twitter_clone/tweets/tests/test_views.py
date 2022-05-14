@@ -25,9 +25,6 @@ class SetUpMixin:
 class DetailtTweetViewTest(SetUpMixin, TestCase):
     '''Тесты для представления, которое отображает главный/детальный твит, всех его потомков и предков.'''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_url_accessible_by_name(self):
         '''Проверяет, что страница доступна по имени url паттерна.'''
         response = self.client.get(
@@ -141,9 +138,6 @@ class LikeTweetViewTest(SetUpMixin, TestCase):
     для текущего авторизованного пользователя.
     '''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_for_unauthorized(self):
         '''
         Проверяет, что сервер отдает 401 ошибку
@@ -199,9 +193,6 @@ class DislikeTweetViewTest(SetUpMixin, TestCase):
     Тесты для представления, которое обрабатывает дизлайк/отмену лайка
     твита для текущего авторизованного пользователя.
     '''
-
-    def setUp(self):
-        return super().setUp()
 
     def test_view_for_unauthorized(self):
         '''
@@ -261,9 +252,6 @@ class RetweetViewTest(SetUpMixin, TestCase):
     для текущего авторизованного пользователя.
     '''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_for_unauthorized(self):
         '''
         Проверяет, что сервер отдает 401 ошибку
@@ -319,9 +307,6 @@ class CancelRetweetViewTest(SetUpMixin, TestCase):
     Тесты для представления, которое обрабатывает отмену ретвита
     для текущего авторизованного пользователя.
     '''
-
-    def setUp(self):
-        return super().setUp()
 
     def test_view_for_unauthorized(self):
         '''
@@ -380,9 +365,6 @@ class AddTweetToBookmarksViewTest(SetUpMixin, TestCase):
     для текущего авторизованного пользователя.
     '''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_for_unauthorized(self):
         '''
         Проверяет, что сервер отдает 401 ошибку
@@ -438,9 +420,6 @@ class DeleteTweetFromBookmarksViewTest(SetUpMixin, TestCase):
     для текущего авторизованного пользователя.
     '''
 
-    def setUp(self):
-        return super().setUp()
-
     def test_view_for_unauthorized(self):
         '''
         Проверяет, что сервер отдает 401 ошибку
@@ -495,9 +474,6 @@ class UserActionsApiViewTests(SetUpMixin, TestCase):
     Тесты для представления, в котором возвращается JSON
     с лайками, ретвитами, закладками текущего авторизованного пользователя.
     '''
-    
-    def setUp(self):
-        return super().setUp()
 
     def test_view_url_accessible_by_name(self):
         '''Проверяет, что страница доступна по имени url паттерна.'''

@@ -19,6 +19,14 @@
         {% endblock %}
 
         {% block content %}
+            <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" style="z-index: 100">
+                <div class="toast" id="toastNotification" data-bs-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body">
+                        <div class="toast-text fs-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endblock %}
 
         {% block right_sidebar %}

@@ -1,7 +1,9 @@
+import re
 from django.db import models
 from django.urls import reverse
-from django.conf import settings
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.contrib.postgres.fields import CICharField, CIEmailField
@@ -11,6 +13,16 @@ from django.contrib.postgres.fields import CICharField, CIEmailField
 def get_profile_photo_path(instance, filename):
     '''Возвращает путь для загрузки фото профиля пользователя.'''
     return f'photos/{instance.username}/{filename}'
+
+def validate_username(value):
+    '''
+    Проверяет соответствие логина/имени пользователя заданному шаблону.
+    Шаблон соответствует строчным и заглавным латинским буквам, цифрам и знаку нижнего подчеркивания.
+    '''
+    pattern = re.compile('^[a-zA-Z0-9_]*$')
+    result = pattern.findall(value)
+    if not result:
+        raise ValidationError("Имя пользователя может содержать только латинские буквы, цифры и '_'.", code='invalid')
 
 class UserNotification(models.Model):
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
@@ -35,7 +47,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=15,
         unique=True,
         error_messages={'unique': 'Данное имя уже занято. Пожалуйста, выберите другое.'},
-        verbose_name='Username'
+        verbose_name='Username',
+        validators=[
+            MinLengthValidator(4, 'Имя пользователя не может быть менее 4 символов.'),
+            validate_username
+        ]
     )
     email = CIEmailField(
         max_length=255,
@@ -65,7 +81,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Пользователи'
 
     def clean(self):
-        super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
 
     def get_short_name(self):
