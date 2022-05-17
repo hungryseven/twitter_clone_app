@@ -34,10 +34,10 @@
         </div>
         <div class="actions-info d-flex flex-row border-bottom py-3" id="actions-info{{ detail_tweet.id }}">
             <a href="" class="retweets-info" id="retweets-info{{ detail_tweet.id }}">
-                <strong class="retweets-count" id="retweets-count{{ detail_tweet.id }}" style="color: black;">{{ detail_tweet.retweets.count }}</strong> ретвита(-ов)
+                <strong class="retweets-count detail" id="retweets-count{{ detail_tweet.id }}" style="color: black;">{{ detail_tweet.retweets.count }}</strong> ретвита(-ов)
             </a>
             <a href="" class="likes-info mx-4" id="likes-info{{ detail_tweet.id }}">
-                <strong class="likes-count" id="likes-count{{ detail_tweet.id }}" style="color: black;">{{ detail_tweet.likes.count }}</strong> отметки(-ок) "Нравится"
+                <strong class="likes-count detail" id="likes-count{{ detail_tweet.id }}" style="color: black;">{{ detail_tweet.likes.count }}</strong> отметки(-ок) "Нравится"
             </a>
         </div>
     </div>

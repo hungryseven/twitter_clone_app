@@ -1,0 +1,27 @@
+{% extends 'main_app/base_main_app.html' %}
+{% load tweets_template_utils %}
+{% load static %}
+
+{% block extra_static %}
+    {{ block.super }}
+{% endblock %}
+
+{% block upper_content %}
+    <div class="home-header border-bottom">
+        <div class="header-name px-3 pt-2 pb-2">
+            <span>Главная</span>
+        </div>
+        {% render_tweet_form id=detail_tweet.id %}
+    </div>
+{% endblock %}
+
+{% block main_content %}
+    <div class="tweets-container">
+        {% for tweet in tweets %}
+            <div class="home-tweet" id="home-tweet{{ tweet.pk }}">
+                {% render_short_tweet tweet %}
+                {% include 'tweets/tweet_modal_snippet.html' with tweet=tweet %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

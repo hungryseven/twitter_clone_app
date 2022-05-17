@@ -6,11 +6,7 @@
     <div class="tweets-container">
         {% for tweet in root_tweets %}
             <div class="profile-tweet" id="profile-tweet{{ tweet.pk }}">
-                {% if tweet.user.username != profile_owner.username %}
-                    {% render_short_tweet tweet is_retweet=True %}
-                {% else %}
-                    {% render_short_tweet tweet %}
-                {% endif %}
+                {% render_short_tweet tweet %}
                 {% include 'tweets/tweet_modal_snippet.html' with tweet=tweet %}
             </div>
         {% endfor %}

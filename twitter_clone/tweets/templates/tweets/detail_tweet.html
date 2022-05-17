@@ -15,7 +15,7 @@
                 <!-- Если пользователь авторизован, то рендерим форму ответа(создания твита) под главным твитом на странице -->
                 {% if user.is_authenticated %}
                     <div class="border-bottom">
-                        {% render_tweet_form id=detail_tweet.id placeholder="Твитнуть в ответ" %}
+                        {% render_tweet_form id=detail_tweet.id placeholder="Твитнуть в ответ" submit_value="Ответить" %}
                     </div>
                 {% endif %}
             {% else %}

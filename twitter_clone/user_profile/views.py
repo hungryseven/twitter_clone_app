@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, View
 from django.views.generic.edit import BaseUpdateView
-from django.db.models import F
+from django.db.models import F, Value, BigIntegerField
 
 from braces.views import JSONResponseMixin
 
@@ -30,10 +30,12 @@ class ProfileTweetsView(ProfileDataMixin, ListView):
         # Находим корневые твиты и ретвиты найденного пользователя.
         # Вводим новую колонку с временем совершения действия(время создания твита и время ретвита),
         # объединяем запросы и сортируем по этой колонке.
-        user_tweets = Tweet.objects.filter(user__username=self.user.username, parent__isnull=True).annotate(action_time=F('pub_date')). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
-        user_retweets = self.user.retweeted_tweets.annotate(action_time=F('tweetretweet__timestamp')). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+        user_tweets = self.user.tweets.filter(parent__isnull=True). \
+                        annotate(action_time=F('pub_date'), retweeted_by=Value(0, output_field=BigIntegerField())). \
+                        select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+        user_retweets = self.user.retweeted_tweets. \
+                        annotate(action_time=F('tweetretweet__timestamp'), retweeted_by=Value(self.user.pk, output_field=BigIntegerField())). \
+                        select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
         return user_tweets.union(user_retweets).order_by('-action_time')
 
     def get_context_data(self, **kwargs):
@@ -59,9 +61,6 @@ class ProfileRepliesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Твиты с ответами от {self.user.profile_name} (@{self.user.username})'
         return context
-
-class ProfileMediaView(ProfileDataMixin, ListView):
-    pass
 
 class ProfileLikesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
     '''

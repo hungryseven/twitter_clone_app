@@ -77,7 +77,7 @@ for (let like_btn of like_btns) {
                 })
                 .then(data => {
                     // Устанавливаем новое количество лайков на посте.
-                    if (data.quantity == 0) {
+                    if (data.quantity == 0 && counter.classList.contains('short')) {
                         counter.innerHTML = '';
                     } else {
                         counter.innerHTML = data.quantity;
@@ -172,7 +172,7 @@ for (let retweet_btn of retweet_btns) {
                 })
                 .then(data => {
                     // Устанавливаем новое количество ретвитов на посте.
-                    if (data.quantity == 0) {
+                    if (data.quantity == 0 && counter.classList.contains('short')) {
                         counter.innerHTML = '';
                     } else {
                         counter.innerHTML = data.quantity;

@@ -3,44 +3,54 @@ from django import template
 from django.utils.safestring import mark_safe
 
 from authorization.models import CustomUser
+from tweets.models import Tweet
 
 register = template.Library()
 
 @register.inclusion_tag('tweets/detail_tweet_snippet.html', takes_context=True)
 def render_detail_tweet(context, tweet):
-    '''
-    Тэг, который рендерит главный/детальный твит на странице.
-    '''
+    '''Тэг, который рендерит главный/детальный твит на странице.'''
     return {
         'request': context['view'].request,
         'detail_tweet': tweet
     }
 
 @register.inclusion_tag('tweets/short_tweet_snippet.html', takes_context=True)
-def render_short_tweet(context, tweet, is_retweet=False):
+def render_short_tweet(context, tweet):
     '''
     Тэг, который рендерит обычный твит на странице.
-
-    param:
-            is_retweet: если данный параметр установлен в True, то тэг рендерит куски кода с информацией о том,
-                        что данный твит был ретвитнут текущим пользователем(на странице профиля).
     '''
-    return {
+    var_dict = {
         'request': context['view'].request,
         'tweet': tweet,
-        'is_retweet': is_retweet
     }
+    # Если данный твит является ретвитом, то получаем id пользователя,
+    # который его ретвитнул. Если в запросе нет такой колонки,
+    # то перехватываем ошибку.
+    try:
+        retweeted_by = tweet.retweeted_by
+    except AttributeError:
+        return var_dict
+
+    # Если полученный id пользователя отличен от 0.
+    if retweeted_by:
+        print(tweet.retweets.filter(pk=retweeted_by).get())
+        print(tweet.retweets.get(pk=retweeted_by))
+        for user in tweet.retweets.all():
+            if user.pk == retweeted_by:
+                retweeted_user = user
+        var_dict.update(retweeted_user=retweeted_user)
+    return var_dict
 
 @register.inclusion_tag('tweets/tweet_form_snippet.html', takes_context=True)
-def render_tweet_form(context, id='', placeholder='Что происходит?'):
-    '''
-    Тэг, который рендерит форму для создания твитов.
-    '''
+def render_tweet_form(context, id='', placeholder='Что происходит?', submit_value='Твитнуть'):
+    '''Тэг, который рендерит форму для создания твитов.'''
     return {
         'request': context['view'].request,
         'tweet_form': context['tweet_form'],
         'id': id,
-        'placeholder': placeholder
+        'placeholder': placeholder,
+        'submit_value': submit_value
     }
 
 @register.filter
