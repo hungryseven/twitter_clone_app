@@ -7,7 +7,7 @@ const csrftoken = getCookie('csrftoken');
 чтобы выделить выбранный пункт навигационной панели.
 */
 const activeLink = window.location.href;
-let nav_links = document.querySelectorAll('.nav-item.profile a');
+let nav_links = document.querySelectorAll('.nav-item.header a');
 nav_links.forEach(function(link) {
     if (link.href == activeLink) {
         link.parentElement.classList.add('active');

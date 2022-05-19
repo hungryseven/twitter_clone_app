@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from braces.views import JSONResponseMixin
 
 from tweets.forms import TweetForm
+from explore.forms import SearchForm
 
 class DataMixin:
     '''Общий миксин с данными, которые используются на каждой странице (например, форма для твитов).'''
@@ -20,6 +21,7 @@ class DataMixin:
             context['unread_notifications'] = user.notifications.filter(usernotification__is_viewed=False). \
                                                     exclude(user=user).count()
         context['tweet_form'] = TweetForm()
+        context['search_form'] = SearchForm()
         return context
 
 class M2MEditMixin(JSONResponseMixin):

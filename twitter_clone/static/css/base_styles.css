@@ -41,3 +41,34 @@ body {
     font-size: 15px;
     font-weight: 400;
 }
+
+/* SEARCH FORM */
+
+.search-input {
+    position: relative;
+}
+
+.search-input svg {
+    fill: rgb(83, 100, 113);
+    margin-left: 20px;
+    position: absolute;
+    top: 10px;
+}
+
+
+.search-form input {
+    font-size: 16px;
+    background-color: rgb(239, 243, 244);
+    border-color: rgb(239, 243, 244);
+    padding-left: 60px;
+    border-radius: 9999px;
+}
+
+.search-form input:focus {
+    box-shadow: none;
+    border-color: rgb(29, 155, 240);
+}
+
+.search-form input:focus ~ svg {
+    fill: rgb(29, 155, 240);
+}

@@ -2,9 +2,6 @@ import re
 from django import template
 from django.utils.safestring import mark_safe
 
-from authorization.models import CustomUser
-from tweets.models import Tweet
-
 register = template.Library()
 
 @register.inclusion_tag('tweets/detail_tweet_snippet.html', takes_context=True)
@@ -34,8 +31,8 @@ def render_short_tweet(context, tweet):
 
     # Если полученный id пользователя отличен от 0.
     if retweeted_by:
-        print(tweet.retweets.filter(pk=retweeted_by).get())
-        print(tweet.retweets.get(pk=retweeted_by))
+        # print(tweet.retweets.filter(pk=retweeted_by).get())
+        # print(tweet.retweets.get(pk=retweeted_by))
         for user in tweet.retweets.all():
             if user.pk == retweeted_by:
                 retweeted_user = user

@@ -39,6 +39,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'authorization.apps.AuthorizationConfig',
     'main_app.apps.MainAppConfig',
+    'explore.apps.ExploreConfig',
     'tweets.apps.TweetsConfig',
     'user_profile.apps.UserProfileConfig',
     'notifications.apps.NotificationsConfig',

@@ -32,15 +32,15 @@
             <ul class="nav border-bottom">
                 <!-- Отобразит эту вкладку, если текущий авторизованный пользователь не на своей странице или такие пользователи существуют -->
                 {% if profile_owner != user and familiar_followers %}
-                    <li class="nav-item profile py-2 flex-grow-1 text-center">
+                    <li class="nav-item header py-2 flex-grow-1 text-center">
                         <a class="nav-link" href="{% url 'user_profile:followers_you_follow' profile_owner.username %}">Читатели, которых вы знаете</a>
                     </li>
                 {% endif %}
                 
-                <li class="nav-item profile py-2 flex-grow-1 text-center">
+                <li class="nav-item header py-2 flex-grow-1 text-center">
                     <a class="nav-link" href="{% url 'user_profile:user_followers' profile_owner.username %}">Читателей</a>
                 </li>
-                <li class="nav-item profile py-2 flex-grow-1 text-center">
+                <li class="nav-item header py-2 flex-grow-1 text-center">
                     <a class="nav-link" href="{% url 'user_profile:user_following' profile_owner.username %}">Читаемые</a>
                 </li>
             </ul>

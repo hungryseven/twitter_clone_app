@@ -1,0 +1,54 @@
+{% extends 'main_app/base_main_app.html' %}
+{% load explore_template_utils %}
+{% load tweets_template_utils %}
+{% load profile_template_utils %}
+{% load static %}
+
+{% block extra_static %}
+    {{ block.super }}
+    <link type="text/css" href="{% static 'user_profile/css/profile_styles.css' %}" rel="stylesheet">
+    <script type="module" src="{% static 'user_profile/js/user_profile_js.js' %}" defer></script>
+{% endblock %}
+
+{% block upper_content %}
+    {% render_search_form %}
+    <div class="nav-container">
+        <ul class="nav border-bottom">
+            <li class="nav-item header py-2 flex-grow-1 text-center">
+                <a class="nav-link" href="{% url 'explore:search' %}{% add_url_params q=q f='' %}">Популярное</a>
+            </li>
+            <li class="nav-item header py-2 flex-grow-1 text-center">
+                <a class="nav-link" href="{% url 'explore:search' %}{% add_url_params q=q f='live' %}">Последнее</a>
+            </li>
+            <li class="nav-item header py-2 flex-grow-1 text-center">
+                <a class="nav-link" href="{% url 'explore:search' %}{% add_url_params q=q f='user' %}">Люди</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block main_content %}
+    <div class="searched-container">
+        {% for object in searched_objects %}
+            {% if f == "user" %}
+                <div class="searched-user" id="searched-user{{ object.pk }}">
+                    {% render_user_card object user %}
+                </div>
+            {% else %}
+                <div class="searched-tweet" id="searched-tweet{{ object.pk }}">
+                    {% render_short_tweet object %}
+                    {% include 'tweets/tweet_modal_snippet.html' with tweet=object %}
+                </div>
+            {% endif %}
+        {% empty %}
+            <div class="empty-query text-center py-5 px-5">
+                <div class="head-message">
+                    <span>По запросу «{{ q }}» ничего не найдено</span>
+                </div>
+                <div class="bottom-message">
+                    <span>Попробуйте выполнить поиск по другому запросу.</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('authorization.urls')),
     path('', include('main_app.urls')),
+    path('', include('explore.urls')),
     path('', include('tweets.urls')),
     path('', include('user_profile.urls')),
     path('', include('notifications.urls')),

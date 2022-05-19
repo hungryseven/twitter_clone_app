@@ -1,4 +1,3 @@
-from pyexpat import model
 from django import forms
 
 from utils.base_forms import CustomModelForm
