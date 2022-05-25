@@ -21,13 +21,13 @@ class HomeView(DataMixin, ListView):
         # и всех пользотелей, на которых он подписан.
         tweets = Tweet.objects.filter(Q(user=user) | Q(user__in=user.followees.all())). \
                     annotate(action_time=F('pub_date'), retweeted_by=Value(0, output_field=BigIntegerField())). \
-                    select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+                    select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
                     
         # Находим все ретвиты текущего авторизованного пользователя
         # и всех пользователей, на которых он подписан.
         retweets = Tweet.objects.filter(Q(tweetretweet__user=user) | Q(tweetretweet__user__in=user.followees.all())). \
                     annotate(action_time=F('tweetretweet__timestamp'), retweeted_by=F('tweetretweet__user')). \
-                    select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+                    select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
         return tweets.union(retweets).order_by('-action_time')
 
     def get_context_data(self, **kwargs):

@@ -30,6 +30,7 @@
 {% block main_content %}
     <div class="searched-container">
         {% for object in searched_objects %}
+            <!-- Если поиск по пользователям, то рендерим карточку пользователя -->
             {% if f == "user" %}
                 <div class="searched-user" id="searched-user{{ object.pk }}">
                     {% render_user_card object user %}

@@ -2,6 +2,8 @@ import re
 from django import template
 from django.utils.safestring import mark_safe
 
+from itertools import chain
+
 register = template.Library()
 
 @register.inclusion_tag('tweets/detail_tweet_snippet.html', takes_context=True)
@@ -61,19 +63,30 @@ def is_zero(value):
 @register.simple_tag
 def replace_usernames_with_links(text, tweet):
     '''
-    Тэг заменяет все существующие юзернеймы пользователей,
-    которые начинаются с символа "@" и находятся в тексте твита,
-    на соответствующие ссылки на страницы профилей этих пользователей.
+    Тег заменяет все юзернеймы пользователей, начинающиеся с символа "@",
+    если они существуют, и теги в тексте твита на ссылки на страницы
+    профилей и страницу поиска соответственно.
     '''
     mentioned_users = tweet.mentioned_users.all()
-    for user in mentioned_users:
+    related_tags = tweet.related_tags.all()
+
+    # Объединем два qs в общий список.
+    objects_to_link = list(chain(mentioned_users, related_tags))
+
+    # Проходимся по списку и заменяем текущий объект на ссылку.
+    for object in objects_to_link:
+        if hasattr(object, 'username'):
+            object_name = f'@{object.username}'
+        else:
+            object_name = object.tag_name
+
+        # Т.к. юзернеймы и теги не чувствительны к регистру,
+        # сначала находим оригинальное написание объекта в тексте.
+        object_in_text = re.search(rf'{object_name}', text, re.IGNORECASE).group()
         
-        # Достаем юзернейм пользователя из текста в оригинальном виде вместе с символом "@",
-        # так как он может быть написан буквами разных регистров.
-        username_in_text = re.search(rf'@\b{user.username}\b', text, re.IGNORECASE).group()
         text = re.sub(
-            rf'@\b{user.username}\b',
-            f'<a href="{user.get_absolute_url()}" class="username-link">{username_in_text}</a>',
+            rf'{object_name}\b',
+            f'<a href="{object.get_absolute_url()}" class="linked_text">{object_in_text}</a>',
             text,
             flags=re.IGNORECASE
         )

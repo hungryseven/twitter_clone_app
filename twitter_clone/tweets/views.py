@@ -34,17 +34,15 @@ class DetailtTweetView(DataMixin, SingleObjectMixin, ListView):
     def get_queryset(self):
         # Находим всех предков текущего твита(включая сам твит) и всех его ближайших потомков(на один уровень ниже),
         # затем объединяем оба запроса и сортируем по lft значению в порядке возрастания.
-        # Не используются методы django-mptt(get_ancestors и get_childen), т.к. они имеют встроенную сортировку,
-        # из-за чего нельзя добиться необходимого поведения запроса.
         ancestors = Tweet.objects.filter(
             Q(lft__lte=self.object.lft) & Q(rght__gte=self.object.rght),
             tree_id=self.object.tree_id
-        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
         childrens = Tweet.objects.filter(
             Q(lft__gt=self.object.lft) & Q(rght__lt=self.object.rght),
             level=self.object.level+1,
             tree_id=self.object.tree_id
-        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
         return ancestors.union(childrens).order_by('lft')
 
 class MakeTweetView(BaseCreateView):

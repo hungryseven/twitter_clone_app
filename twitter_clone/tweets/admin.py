@@ -4,7 +4,7 @@ from django.forms.widgets import Textarea
 
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Tweet
+from .models import Tweet, Tag
 from utils.mixins import AdminMixin
 
 # Register your models here.
@@ -23,7 +23,9 @@ class TweetAdmin(AdminMixin, DraggableMPTTAdmin):
     list_select_related = ('user', 'parent')
     search_fields = ('text', 'user__username')
     search_help_text = 'Поиск по тексту твита или имени пользователя'
-    readonly_fields = ('get_replies', 'replies_count', 'get_likes', 'likes_count', 'get_retweets', 'retweets_count', 'get_bookmarks', 'bookmarks_count')
+    readonly_fields = (
+        'get_replies', 'replies_count', 'get_likes', 'likes_count', 'get_retweets', 'retweets_count', 'get_bookmarks', 'bookmarks_count', 'get_tags'
+    )
     show_full_result_count = False
     fieldsets = (
         (None, {
@@ -33,6 +35,11 @@ class TweetAdmin(AdminMixin, DraggableMPTTAdmin):
         ('Ответы на текущий твит', {
             'classes': ('collapse',),
             'fields': ('replies_count', 'get_replies'),
+            }
+        ),
+        ('Теги', {
+            'classes': ('collapse',),
+            'fields': ('get_tags',),
             }
         ),
         ('Лайки', {
@@ -54,7 +61,7 @@ class TweetAdmin(AdminMixin, DraggableMPTTAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related('likes', 'retweets', 'bookmarks', 'children')
+        return qs.prefetch_related('likes', 'retweets', 'bookmarks', 'children', 'related_tags')
 
     @admin.display(description='Количество ответов')
     def replies_count(self, obj):
@@ -96,4 +103,36 @@ class TweetAdmin(AdminMixin, DraggableMPTTAdmin):
         '''Выводит строку с ссылками на пользователей, которые добавили в закладки текущий твит.'''
         return self.get_objects(queryset=obj.bookmarks.order_by('-tweetbookmark__timestamp'))
 
+    @admin.display(description='Теги')
+    def get_tags(self, obj):
+        '''Выводит строку с ссылками на пользователей, которые добавили в закладки текущий твит.'''
+        return self.get_objects(queryset=obj.related_tags.all(), line_by_line=True)
+
+class TagAdmin(admin.ModelAdmin):
+    '''
+    Класс, представляющий админ-панель для модели тегов.
+    '''
+
+    list_display = ('tag_name',)
+    search_fields = ('tag_name',)
+    search_help_text = 'Поиск по имени тега'
+    readonly_fields = ('tag_name', 'related_tweets_count')
+    show_full_result_count = False
+    fieldsets = (
+        (None, {
+            'fields': ('tag_name',),
+            }
+        ),
+        ('Связанные твиты', {
+            'fields': ('related_tweets_count',),
+            }
+        ),
+    )
+
+    @admin.display(description='Количество твитов с этим тегом')
+    def related_tweets_count(self, obj):
+        '''Отображает количество твитов, в которых упоминается текущий тег.'''
+        return obj.related_tweets.count()
+
 admin.site.register(Tweet, TweetAdmin)
+admin.site.register(Tag, TagAdmin)

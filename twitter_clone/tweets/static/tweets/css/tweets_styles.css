@@ -34,12 +34,12 @@ textarea {
     margin-right: 18px;
 }
 
-.username-link {
+.linked_text {
     color: rgb(29, 155, 240);
     text-decoration: none;
 }
 
-.username-link:hover {
+.linked_text:hover {
     color: rgb(29, 155, 240);
     text-decoration: underline;
 }
@@ -81,7 +81,7 @@ textarea {
 .retweet-tweet,
 .like-tweet,
 .tweet-others,
-.username-link,
+.linked_text,
 .retweet-info-text {
     z-index: 20;
     position: relative;

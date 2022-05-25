@@ -2,7 +2,7 @@
 {% load explore_template_utils %}
 
 <div class="search-form px-5 py-2">
-    <form action="{% url 'explore:search' %}" method="get" novalidate>
+    <form action="{% url 'explore:search' %}" method="get">
         <div class="search-input">
             {% render_field search_form.q class="form-control form-control-lg" placeholder="Поиск в твиттере" %}
             {% render_field search_form.f class="form-control" type="hidden" %}

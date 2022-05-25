@@ -22,7 +22,7 @@ class SetUpMixin:
     def login_user1(self):
         return self.client.login(username='user1', password='Password1')
 
-class DetailtTweetViewTest(SetUpMixin, TestCase):
+class DetailTweetViewTest(SetUpMixin, TestCase):
     '''Тесты для представления, которое отображает главный/детальный твит, всех его потомков и предков.'''
 
     def test_view_url_accessible_by_name(self):

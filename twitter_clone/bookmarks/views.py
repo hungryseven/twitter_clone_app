@@ -14,7 +14,8 @@ class BookmarksView(SimpleLoginRequiredMixin, DataMixin, ListView):
     context_object_name = 'bookmarks'
 
     def get_queryset(self):
-        return self.request.user.bookmarked_tweets.order_by('-tweetbookmark__timestamp')
+        return self.request.user.bookmarked_tweets.order_by('-tweetbookmark__timestamp'). \
+                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

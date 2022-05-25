@@ -7,6 +7,10 @@ class SearchForm(CustomForm):
     
     q = forms.CharField(
         label='Поисковой запрос',
+        required=True,
+        error_messages={
+            'required': 'Поисковой запрос не может быть пустым.'
+        },
         widget=forms.TextInput(),
     )
     f = forms.CharField(
