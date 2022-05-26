@@ -1,10 +1,29 @@
 {% extends 'main_app/base_main_app.html' %}
 {% load explore_template_utils %}
+{% load main_template_utils %}
 {% load static %}
 
 {% block upper_content %}
-    {% render_search_form %}
+    <div class="form-wrapper px-5">
+        {% render_search_form %}
+    </div>
 {% endblock %}
 
 {% block main_content %}
+    <div class="explore-content topics px-3 pt-1">
+        <div class="header-name mb-3">
+            <span>Актуальные темы для вас</span>
+        </div>
+        <div class="topics">
+            Когда-нибудь здесь появятся актуальные темы.<br>
+            Когда появятся - неизвестно.<br>
+            Пока что не завезли.
+        </div>
+    </div>
+{% endblock %}
+
+{% block right_sidebar %}
+    <div class="d-none d-lg-block col-lg-3">
+        {% render_right_sidebar_users %}
+    </div>
 {% endblock %}

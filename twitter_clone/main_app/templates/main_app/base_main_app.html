@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load explore_template_utils %}
+{% load main_template_utils %}
 {% load static %}
 
 {% block extra_static %}
@@ -30,7 +32,9 @@
 
             {% block right_sidebar %}
                 <div class="d-none d-lg-block col-lg-3">
-                    райт сайд бар
+                    {% render_search_form %}
+                    {% render_right_sidebar_topics %}
+                    {% render_right_sidebar_users %}
                 </div>
             {% endblock %}
 

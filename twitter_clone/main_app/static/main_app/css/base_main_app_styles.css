@@ -75,7 +75,7 @@
 }
 
 @media (min-width: 992px) {
-    .w-xxl {width: 275px;}
+    .w-xxl {width: 250px;}
 }
 
 /* Фиксированная ширина в 600px для блока контента при размере экрана > 720px */
@@ -87,4 +87,13 @@
     color: rgb(15, 20, 25);
     font-size: 20px;
     font-weight: 700;
+}
+
+/* RIGHT SIDE BAR */
+
+.right-sidebar-content {
+    background-color: rgb(247, 249, 249);
+    border-color: rgb(247, 249, 249);
+    border-radius: 16px;
+    border-width: 1px;
 }

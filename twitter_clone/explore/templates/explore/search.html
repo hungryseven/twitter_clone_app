@@ -2,6 +2,7 @@
 {% load explore_template_utils %}
 {% load tweets_template_utils %}
 {% load profile_template_utils %}
+{% load main_template_utils %}
 {% load static %}
 
 {% block extra_static %}
@@ -11,7 +12,9 @@
 {% endblock %}
 
 {% block upper_content %}
-    {% render_search_form %}
+    <div class="form-wrapper px-5">
+        {% render_search_form %}
+    </div>
     <div class="nav-container">
         <ul class="nav border-bottom">
             <li class="nav-item header py-2 flex-grow-1 text-center">
@@ -51,5 +54,12 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+{% endblock %}
+
+{% block right_sidebar %}
+    <div class="d-none d-lg-block col-lg-3">
+        {% render_right_sidebar_topics %}
+        {% render_right_sidebar_users %}
     </div>
 {% endblock %}

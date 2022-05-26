@@ -61,7 +61,7 @@ def is_zero(value):
     return '' if value == 0 else value
 
 @register.simple_tag
-def replace_usernames_with_links(text, tweet):
+def replace_text_with_links(text, tweet):
     '''
     Тег заменяет все юзернеймы пользователей, начинающиеся с символа "@",
     если они существуют, и теги в тексте твита на ссылки на страницы
@@ -69,12 +69,12 @@ def replace_usernames_with_links(text, tweet):
     '''
     mentioned_users = tweet.mentioned_users.all()
     related_tags = tweet.related_tags.all()
-
     # Объединем два qs в общий список.
     objects_to_link = list(chain(mentioned_users, related_tags))
 
     # Проходимся по списку и заменяем текущий объект на ссылку.
     for object in objects_to_link:
+        # Получаем интересующий атрибут объекта.
         if hasattr(object, 'username'):
             object_name = f'@{object.username}'
         else:
@@ -83,7 +83,6 @@ def replace_usernames_with_links(text, tweet):
         # Т.к. юзернеймы и теги не чувствительны к регистру,
         # сначала находим оригинальное написание объекта в тексте.
         object_in_text = re.search(rf'{object_name}', text, re.IGNORECASE).group()
-        
         text = re.sub(
             rf'{object_name}\b',
             f'<a href="{object.get_absolute_url()}" class="linked_text">{object_in_text}</a>',

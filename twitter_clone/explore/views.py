@@ -1,5 +1,7 @@
 import datetime
 
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views.generic import TemplateView, ListView
 from django.db.models import Q, Count
 from django.utils import timezone
@@ -28,13 +30,17 @@ class SearchView(DataMixin, ListView):
     template_name = 'explore/search.html'
     context_object_name = 'searched_objects'
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
         self.q = self.request.GET['q']
         self.f = self.request.GET['f']
+        if not self.q:
+            return HttpResponseRedirect(reverse('explore:explore'))
+        return super().get(request, *args, **kwargs)
 
+    def get_queryset(self):
         # Поиск для вкладки "Популярное".
         # Популярное формируется из твитов, написанных в течение прошлых 7 дней от текущего момента,
-        # у которых сумма ответов(прямых потомков), лайков и ретвитов >= 10.
+        # у которых сумма ответов(прямых потомков), лайков и ретвитов > 0.
         if not self.f:
             week_ago = timezone.now() - datetime.timedelta(days=7)
             # Если "#" - первый символ в поисковом запросе, то ищем объект тега и связанные с ним твиты.
@@ -45,13 +51,13 @@ class SearchView(DataMixin, ListView):
                     return []
                 return tag.related_tweets. \
                         annotate(actions_count=Count('likes', distinct=True)+Count('retweets', distinct=True)+Count('children', distinct=True)). \
-                        filter(pub_date__gte=week_ago, actions_count__gte=10).order_by('-actions_count'). \
+                        filter(pub_date__gte=week_ago, actions_count__gt=0).order_by('-actions_count'). \
                         select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
 
             # В противном случае ищем твиты, содержащие в тексте переданный поисковой запрос без учета регистра.
             return Tweet.objects. \
                     annotate(actions_count=Count('likes', distinct=True)+Count('retweets', distinct=True)+Count('children', distinct=True)). \
-                    filter(text__icontains=self.q, pub_date__gte=week_ago, actions_count__gte=10).order_by('-actions_count'). \
+                    filter(text__search=self.q, pub_date__gte=week_ago, actions_count__gt=0).order_by('-actions_count'). \
                     select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
         
         # Поиск для вкладки "Последнее".
@@ -63,7 +69,7 @@ class SearchView(DataMixin, ListView):
                     return []
                 return tag.related_tweets.order_by('-pub_date'). \
                     select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
-            return Tweet.objects.filter(text__icontains=self.q).order_by('-pub_date'). \
+            return Tweet.objects.filter(text__search=self.q).order_by('-pub_date'). \
                     select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
 
         # Поиск для вкладки "Люди".
