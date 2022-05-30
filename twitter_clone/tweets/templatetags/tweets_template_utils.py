@@ -10,8 +10,9 @@ register = template.Library()
 def render_detail_tweet(context, tweet):
     '''Тэг, который рендерит главный/детальный твит на странице.'''
     return {
-        'request': context['view'].request,
-        'detail_tweet': tweet
+        'request': context['request'],
+        'detail_tweet': tweet,
+        'detail_tweet_descendants': context['detail_tweet_descendants']
     }
 
 @register.inclusion_tag('tweets/short_tweet_snippet.html', takes_context=True)
@@ -20,8 +21,9 @@ def render_short_tweet(context, tweet):
     Тэг, который рендерит обычный твит на странице.
     '''
     var_dict = {
-        'request': context['view'].request,
+        'request': context['request'],
         'tweet': tweet,
+        'detail_tweet_descendants': context.get('detail_tweet_descendants', None)
     }
     # Если данный твит является ретвитом, то получаем id пользователя,
     # который его ретвитнул. Если в запросе нет такой колонки,
@@ -33,8 +35,6 @@ def render_short_tweet(context, tweet):
 
     # Если полученный id пользователя отличен от 0.
     if retweeted_by:
-        # print(tweet.retweets.filter(pk=retweeted_by).get())
-        # print(tweet.retweets.get(pk=retweeted_by))
         for user in tweet.retweets.all():
             if user.pk == retweeted_by:
                 retweeted_user = user
@@ -45,11 +45,37 @@ def render_short_tweet(context, tweet):
 def render_tweet_form(context, id='', placeholder='Что происходит?', submit_value='Твитнуть'):
     '''Тэг, который рендерит форму для создания твитов.'''
     return {
-        'request': context['view'].request,
+        'request': context['request'],
         'tweet_form': context['tweet_form'],
         'id': id,
         'placeholder': placeholder,
         'submit_value': submit_value
+    }
+
+@register.inclusion_tag('tweets/_reply_to_snippet.html')
+def reply_to(tweet, current_user, users_parents, detail_tweet_descendants=None):
+    '''Тег, который рендерит строку с участниками переписки для данного твита.'''
+    if len(users_parents) > 3:
+        users_parents = users_parents.prefetch_related('followees')
+    var_dict = {
+        'current_user': current_user,
+        'tweet_id': str(tweet.id),
+        'users': users_parents
+    }
+    if detail_tweet_descendants:
+        if tweet in detail_tweet_descendants:
+            return var_dict
+    else:
+        return var_dict
+
+@register.inclusion_tag('tweets/users_modal_snippet.html')
+def render_users_modal(id, title, users, current_user):
+    '''Тег, который рендерит модальное окно с участниками переписки, если их больше 3.'''
+    return {
+        'current_user': current_user,
+        'id': id,
+        'title': title,
+        'users': users
     }
 
 @register.filter

@@ -82,7 +82,8 @@ textarea {
 .like-tweet,
 .tweet-others,
 .linked_text,
-.retweet-info-text {
+.retweet-info-text,
+.reply-link {
     z-index: 20;
     position: relative;
 }

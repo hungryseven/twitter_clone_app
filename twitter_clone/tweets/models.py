@@ -10,6 +10,8 @@ from utils.funcs import build_url
 
 # Create your models here.
 
+FIELDS_TO_PREFETCH = ['likes', 'retweets', 'children', 'mentioned_users', 'related_tags', 'users_parents']
+
 User = settings.AUTH_USER_MODEL
 
 def filter_tweet_text(text):
@@ -45,19 +47,34 @@ def filter_tweet_text(text):
     return filtered
 
 class TweetLike(models.Model):
+    '''Промежуточная модель для юзеров и их лайков.'''
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tweet = models.ForeignKey('Tweet', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 class TweetRetweet(models.Model):
+    '''Промежуточная модель для юзеров и их ретвитов.'''
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tweet = models.ForeignKey('Tweet', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 class TweetBookmark(models.Model):
+    '''Промежуточная модель для юзеров и их закладок.'''
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tweet = models.ForeignKey('Tweet', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class TweetUsers_Parents(models.Model):
+    '''
+    Промежуточная модель для твитов и юзеров, которые являются авторами твитов-предков для каждого твита.
+    '''
+
+    tweet = models.ForeignKey('Tweet', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    level = models.PositiveSmallIntegerField()
 
 class Tweet(MPTTModel):
     '''
@@ -73,6 +90,7 @@ class Tweet(MPTTModel):
     bookmarks = models.ManyToManyField(User, blank=True, related_name='bookmarked_tweets', through='TweetBookmark')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tweets', verbose_name='Пользователь')
     parent = TreeForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children', verbose_name='Является ответом на твит')
+    users_parents = models.ManyToManyField(User, blank=True, related_name='+', through='TweetUsers_Parents')
 
     class Meta:
         verbose_name = 'твит'
@@ -81,6 +99,13 @@ class Tweet(MPTTModel):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+        # После сохранения объекта твита в БД находим всех его предков,
+        # исключая те твиты, которые написаны тем же пользователем, что и этот.
+        # Затем добавляем всех владельцев твитов-предков и уровень этих твитов.
+        tweets_ancestors = self.get_ancestors().exclude(user=self.user)
+        for tweet in tweets_ancestors:
+            self.users_parents.add(tweet.user, through_defaults={'level': tweet.level})
 
         # После сохранения объекта твита в БД фильтруем его текст
         # на наличие юзернеймов и тегов.
@@ -110,6 +135,7 @@ class Tweet(MPTTModel):
         return reverse('tweets:detail_tweet', kwargs={'username': self.user.username, 'pk': self.pk})
 
 class Tag(models.Model):
+    '''Класс, представляющий модель таблицы БД в тегами.'''
 
     tag_name = CICharField(
         max_length=140,

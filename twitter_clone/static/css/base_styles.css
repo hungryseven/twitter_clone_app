@@ -72,3 +72,24 @@ body {
 .search-form input:focus ~ svg {
     fill: rgb(29, 155, 240);
 }
+
+/* REPLYING TO */
+
+.replying-to {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(83, 100, 113);
+}
+
+.reply-link,
+.reply-and {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(29, 155, 240);
+    text-decoration: none;
+}
+
+.reply-link:hover {
+    color: rgb(29, 155, 240);
+    text-decoration: underline;
+}

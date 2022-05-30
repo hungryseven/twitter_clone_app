@@ -45,6 +45,7 @@
                     <span class="text-muted">{{ tweet.pub_date|timesince }}</span>
                 </div>
             </div>
+            {% reply_to tweet request.user tweet.users_parents.all detail_tweet_descendants %}
         </div>
 
         <!-- Блок с контентом твита(текст, фотографии и т.д.) -->

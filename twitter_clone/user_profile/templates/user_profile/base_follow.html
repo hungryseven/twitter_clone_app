@@ -3,12 +3,6 @@
 {% load profile_template_utils %}
 {% load static %}
 
-{% block extra_static %}
-    {{ block.super }}
-    <link type="text/css" href="{% static 'user_profile/css/profile_styles.css' %}" rel="stylesheet">
-    <script type="module" src="{% static 'user_profile/js/user_profile_js.js' %}" defer></script>
-{% endblock %}
-
 {% block upper_content %}
     <div class="follow-container">
         <div class="follow-header d-flex flex-row align-items-center px-3 pt-2 mb-1">

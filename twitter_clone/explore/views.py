@@ -7,7 +7,7 @@ from django.db.models import Q, Count
 from django.utils import timezone
 
 from authorization.models import CustomUser
-from tweets.models import Tweet, Tag
+from tweets.models import Tweet, Tag, FIELDS_TO_PREFETCH
 from utils.mixins import DataMixin
 
 # Create your views here.
@@ -52,13 +52,13 @@ class SearchView(DataMixin, ListView):
                 return tag.related_tweets. \
                         annotate(actions_count=Count('likes', distinct=True)+Count('retweets', distinct=True)+Count('children', distinct=True)). \
                         filter(pub_date__gte=week_ago, actions_count__gt=0).order_by('-actions_count'). \
-                        select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+                        select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
 
             # В противном случае ищем твиты, содержащие в тексте переданный поисковой запрос без учета регистра.
             return Tweet.objects. \
                     annotate(actions_count=Count('likes', distinct=True)+Count('retweets', distinct=True)+Count('children', distinct=True)). \
                     filter(text__search=self.q, pub_date__gte=week_ago, actions_count__gt=0).order_by('-actions_count'). \
-                    select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+                    select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
         
         # Поиск для вкладки "Последнее".
         if self.f == 'live':
@@ -68,9 +68,9 @@ class SearchView(DataMixin, ListView):
                 except Tag.DoesNotExist:
                     return []
                 return tag.related_tweets.order_by('-pub_date'). \
-                    select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+                    select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
             return Tweet.objects.filter(text__search=self.q).order_by('-pub_date'). \
-                    select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+                    select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
 
         # Поиск для вкладки "Люди".
         if self.f == 'user':

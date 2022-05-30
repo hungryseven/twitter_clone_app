@@ -10,7 +10,7 @@ from utils.mixins import SimpleLoginRequiredMixin, SimpleLoginRequiredAjaxMixin
 from .utils import ProfileDataMixin, UserFollowMixin
 from .forms import UpdateProfileForm
 from authorization.models import CustomUser
-from tweets.models import Tweet
+from tweets.models import Tweet, FIELDS_TO_PREFETCH
 
 # Create your views here.
 
@@ -31,10 +31,10 @@ class ProfileTweetsView(ProfileDataMixin, ListView):
         # объединяем запросы и сортируем по этой колонке.
         user_tweets = self.user.tweets.filter(parent__isnull=True). \
                         annotate(action_time=F('pub_date'), retweeted_by=Value(0, output_field=BigIntegerField())). \
-                        select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+                        select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
         user_retweets = self.user.retweeted_tweets. \
                         annotate(action_time=F('tweetretweet__timestamp'), retweeted_by=Value(self.user.pk, output_field=BigIntegerField())). \
-                        select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+                        select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
         return user_tweets.union(user_retweets).order_by('-action_time')
 
     def get_context_data(self, **kwargs):
@@ -54,7 +54,7 @@ class ProfileRepliesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
     def get_queryset(self):
         self.user = self.get_user()
         return Tweet.objects.filter(user__username=self.user.username, parent__isnull=False).order_by('-pub_date'). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+                select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,7 +73,7 @@ class ProfileLikesView(SimpleLoginRequiredMixin, ProfileDataMixin, ListView):
     def get_queryset(self):
         self.user = self.get_user()
         return self.user.liked_tweets.order_by('-tweetlike__timestamp'). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users')
+                select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

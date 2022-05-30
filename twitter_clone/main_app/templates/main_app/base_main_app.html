@@ -6,8 +6,10 @@
 {% block extra_static %}
     <link type="text/css" href="{% static 'main_app/css/base_main_app_styles.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'tweets/css/tweets_styles.css' %}" rel="stylesheet">
-    <script type="module" src="{% static 'tweets/js/tweets_js.js' %}" defer></script>
+    <link type="text/css" href="{% static 'user_profile/css/profile_styles.css' %}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+    <script type="module" src="{% static 'tweets/js/tweets_js.js' %}" defer></script>
+    <script type="module" src="{% static 'user_profile/js/user_profile_js.js' %}" defer></script>
 {% endblock %}
 
 {% block container %}

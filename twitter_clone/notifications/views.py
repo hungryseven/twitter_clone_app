@@ -1,5 +1,6 @@
 from django.views.generic import ListView
 
+from tweets.models import FIELDS_TO_PREFETCH
 from authorization.models import UserNotification
 from utils.mixins import DataMixin, SimpleLoginRequiredMixin
 
@@ -27,7 +28,7 @@ class MentionsView(SimpleLoginRequiredMixin, DataMixin, ListView):
 
     def get_queryset(self):
         return self.user.notifications.exclude(user=self.user).order_by('-pub_date'). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+                select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

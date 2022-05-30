@@ -18,6 +18,8 @@
         </div>
     </div>
 
+    {% reply_to detail_tweet request.user detail_tweet.users_parents.all detail_tweet_descendants %}
+
     <!-- Блок с контентом твита(текст, фотографии и т.д.) -->
     <div class="detail-tweet-content mb-3" id="detail-tweet-content{{ detail_tweet.id }}" style="z-index: 100;">
         <div class="tweet-text fs-4" id="tweet-text{{ detail_tweet.id }}">

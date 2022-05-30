@@ -1,5 +1,6 @@
 from django.views.generic import ListView
 
+from tweets.models import FIELDS_TO_PREFETCH
 from utils.mixins import DataMixin, SimpleLoginRequiredMixin
 
 # Create your views here.
@@ -15,7 +16,7 @@ class BookmarksView(SimpleLoginRequiredMixin, DataMixin, ListView):
 
     def get_queryset(self):
         return self.request.user.bookmarked_tweets.order_by('-tweetbookmark__timestamp'). \
-                select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+                select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

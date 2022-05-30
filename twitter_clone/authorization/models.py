@@ -25,12 +25,16 @@ def validate_username(value):
         raise ValidationError("Имя пользователя может содержать только латинские буквы, цифры и '_'.", code='invalid')
 
 class UserNotification(models.Model):
+    '''Промежуточная модель для юзеров и их уведомлений.'''
+
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
     tweet = models.ForeignKey('tweets.Tweet', on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
     is_viewed = models.BooleanField(default=False)
 
 class UserFollow(models.Model):
+    '''Промежуточная модель для подписок.'''
+
     followee = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='follower_set') # Тот, на кого подписались
     follower = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='followee_set') # Тот, кто подписался
     timestamp = models.DateTimeField(auto_now_add=True)

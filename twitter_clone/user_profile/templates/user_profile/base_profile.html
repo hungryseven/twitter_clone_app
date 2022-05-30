@@ -2,12 +2,6 @@
 {% load profile_template_utils %}
 {% load static %}
 
-{% block extra_static %}
-    {{ block.super }}
-    <link type="text/css" href="{% static 'user_profile/css/profile_styles.css' %}" rel="stylesheet">
-    <script type="module" src="{% static 'user_profile/js/user_profile_js.js' %}" defer></script>
-{% endblock %}
-
 {% block upper_content %}
     <div class="profile-container">
         {% render_profile_header profile_owner user %}

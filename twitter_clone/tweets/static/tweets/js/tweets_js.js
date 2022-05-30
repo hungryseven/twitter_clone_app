@@ -48,9 +48,7 @@ for (let like_btn of like_btns) {
     like_btn.addEventListener('click', function(event) {
         event.preventDefault();
         let tweet_id = parseInt(this.id.match(/\d+/));
-        let counter = document.getElementById(`likes-count${tweet_id}`);
-        let svg = this.querySelector('svg');
-        let svg_path = svg.querySelector('path');
+        let counters = document.querySelectorAll(`#likes-count${tweet_id}`);
 
         /* 
         Если твит уже лайкнут пользователем (у кнопки будет класс "liked"), то отправится запрос на удаление,
@@ -76,19 +74,28 @@ for (let like_btn of like_btns) {
                     });
                 })
                 .then(data => {
-                    // Устанавливаем новое количество лайков на посте.
-                    if (data.quantity == 0 && counter.classList.contains('short')) {
-                        counter.innerHTML = '';
-                    } else {
-                        counter.innerHTML = data.quantity;
-                    };
+                    /* 
+                    Устанавливаем новое количество лайков на постах.
+                    Таких постов может быть несколько, т.к. на странице могут быть
+                    как оригинальные твиты, так и ретвиты этого твита.
+                    */
+                    for (let counter of counters) {
+                        if (data.quantity == 0 && counter.classList.contains('short')) {
+                            counter.innerHTML = '';
+                        } else {
+                            counter.innerHTML = data.quantity;
+                        };
 
-                    // Меняем классы и атрибуты на кнопке, счетчике лайков и svg-иконке.
-                    this.classList.remove('liked');
-                    counter.classList.remove('like-active');
-                    counter.classList.add('not-active');
-                    svg.setAttribute('fill', 'CurrentColor');
-                    svg_path.setAttribute('d', likes_svg.not_like);
+                        // Меняем классы и атрибуты на кнопках, счетчиках лайков и svg-иконках.
+                        let btn = counter.previousElementSibling;
+                        let svg = btn.querySelector('svg');
+                        let svg_path = svg.querySelector('path');
+                        btn.classList.remove('liked');
+                        counter.classList.remove('like-active');
+                        counter.classList.add('not-active');
+                        svg.setAttribute('fill', 'CurrentColor');
+                        svg_path.setAttribute('d', likes_svg.not_like);
+                    };
                 })
                 .catch(error => {
                     console.error(error.data.error);
@@ -114,15 +121,20 @@ for (let like_btn of like_btns) {
                     });
                 })
                 .then(data => {
-                    // Устанавливаем новое количество лайков на посте.
-                    counter.innerHTML = data.quantity;
+                    for (let counter of counters) {
+                        // Устанавливаем новое количество лайков на постах.
+                        counter.innerHTML = data.quantity;
 
-                    // Меняем классы и атрибуты на кнопке, счетчике лайков и svg-иконке.
-                    this.classList.add('liked');
-                    counter.classList.remove('not-active');
-                    counter.classList.add('like-active');
-                    svg.setAttribute('fill', 'rgb(249, 24, 128)');
-                    svg_path.setAttribute('d', likes_svg.like);
+                        // Меняем классы и атрибуты на кнопках, счетчике лайков и svg-иконках.
+                        let btn = counter.previousElementSibling;
+                        let svg = btn.querySelector('svg');
+                        let svg_path = svg.querySelector('path');
+                        btn.classList.add('liked');
+                        counter.classList.remove('not-active');
+                        counter.classList.add('like-active');
+                        svg.setAttribute('fill', 'rgb(249, 24, 128)');
+                        svg_path.setAttribute('d', likes_svg.like);
+                    };
                 })
                 .catch(error => {
                     console.error(error.data.error);
@@ -143,9 +155,7 @@ for (let retweet_btn of retweet_btns) {
     retweet_btn.addEventListener('click', function(event) {
         event.preventDefault();
         let tweet_id = parseInt(this.id.match(/\d+/));
-        let counter = document.getElementById(`retweets-count${tweet_id}`);
-        let svg = this.querySelector('svg');
-        let svg_path = svg.querySelector('path');
+        let counters = document.querySelectorAll(`#retweets-count${tweet_id}`);
 
         /* 
         Если твит уже ретвитнут пользователем (у кнопки будет класс "retweeted"), то отправится запрос на удаление,
@@ -171,19 +181,24 @@ for (let retweet_btn of retweet_btns) {
                     });
                 })
                 .then(data => {
-                    // Устанавливаем новое количество ретвитов на посте.
-                    if (data.quantity == 0 && counter.classList.contains('short')) {
-                        counter.innerHTML = '';
-                    } else {
-                        counter.innerHTML = data.quantity;
-                    };
+                    for (let counter of counters) {
+                        // Устанавливаем новое количество ретвитов на постах.
+                        if (data.quantity == 0 && counter.classList.contains('short')) {
+                            counter.innerHTML = '';
+                        } else {
+                            counter.innerHTML = data.quantity;
+                        };
 
-                    // Меняем классы и атрибуты на кнопке, счетчике ретвитов и svg-иконке.
-                    this.classList.remove('retweeted');
-                    counter.classList.remove('retweet-active');
-                    counter.classList.add('not-active');
-                    svg.setAttribute('fill', 'CurrentColor');
-                    svg_path.setAttribute('d', retweets_svg.not_retweet);
+                        // Меняем классы и атрибуты на кнопках, счетчике ретвитов и svg-иконках.
+                        let btn = counter.previousElementSibling;
+                        let svg = btn.querySelector('svg');
+                        let svg_path = svg.querySelector('path');
+                        btn.classList.remove('retweeted');
+                        counter.classList.remove('retweet-active');
+                        counter.classList.add('not-active');
+                        svg.setAttribute('fill', 'CurrentColor');
+                        svg_path.setAttribute('d', retweets_svg.not_retweet);
+                    };
                 })
                 .catch(error => {
                     console.error(error.data.error);
@@ -209,15 +224,20 @@ for (let retweet_btn of retweet_btns) {
                     });
                 })
                 .then(data => {
-                    // Устанавливаем новое количество ретвитов на посте.
-                    counter.innerHTML = data.quantity;
+                    for (let counter of counters) {
+                        // Устанавливаем новое количество ретвитов на посте.
+                        counter.innerHTML = data.quantity;
 
-                    // Меняем классы и атрибуты на кнопке, счетчике ретвитов и svg-иконке.
-                    this.classList.add('retweeted');
-                    counter.classList.remove('not-active');
-                    counter.classList.add('retweet-active');
-                    svg.setAttribute('fill', 'rgb(0, 186, 124)');
-                    svg_path.setAttribute('d', retweets_svg.retweet);
+                        // Меняем классы и атрибуты на кнопках, счетчике ретвитов и svg-иконках.
+                        let btn = counter.previousElementSibling;
+                        let svg = btn.querySelector('svg');
+                        let svg_path = svg.querySelector('path');
+                        btn.classList.add('retweeted');
+                        counter.classList.remove('not-active');
+                        counter.classList.add('retweet-active');
+                        svg.setAttribute('fill', 'rgb(0, 186, 124)');
+                        svg_path.setAttribute('d', retweets_svg.retweet);
+                    }
                 })
                 .catch(error => {
                     console.error(error.data.error);
@@ -234,7 +254,8 @@ for (let bookmark_btn of bookmark_btns) {
     bookmark_btn.addEventListener('click', function(event) {
         event.preventDefault();
         let tweet_id = parseInt(this.id.match(/\d+/));
-        let btn_text = this.querySelector('.item-text');
+        let btns = document.querySelectorAll(`#bookmark-btn${tweet_id}`);
+        console.log(btns)
 
         /* 
         Если твит уже в закладках у пользователя (у кнопки будет класс "bookmarked"), то отправится запрос на удаление,
@@ -260,9 +281,12 @@ for (let bookmark_btn of bookmark_btns) {
                     });
                 })
                 .then(data => {
-                    // Меняем класс кнопки и ее текст.
-                    this.classList.remove('bookmarked');
-                    btn_text.innerHTML = data.btn_text;
+                    for (let btn of btns) {
+                        let btn_text = btn.querySelector('.item-text');
+                        // Меняем класс кнопки и ее текст.
+                        btn.classList.remove('bookmarked');
+                        btn_text.innerHTML = data.btn_text;
+                    }
                     // Вкладываем текст во всплывающее уведомление и вызываем его.
                     toast_text.innerHTML = data.success_message;
                     toast.show();
@@ -291,9 +315,12 @@ for (let bookmark_btn of bookmark_btns) {
                     });
                 })
                 .then(data => {
-                    // Меняем класс кнопки и ее текст.
-                    this.classList.add('bookmarked');
-                    btn_text.innerHTML = data.btn_text;
+                    for (let btn of btns) {
+                        let btn_text = btn.querySelector('.item-text');
+                        // Меняем класс кнопки и ее текст.
+                        btn.classList.add('bookmarked');
+                        btn_text.innerHTML = data.btn_text;
+                    }
                     // Вкладываем текст во всплывающее уведомление и вызываем его.
                     toast_text.innerHTML = data.success_message;
                     toast.show();
@@ -339,45 +366,55 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             for (let liked_id of data.likes) {
-                let like_btn = document.getElementById(`like-btn${liked_id}`);
-                let counter = document.getElementById(`likes-count${liked_id}`);
+                let like_btns = document.querySelectorAll(`#like-btn${liked_id}`);
 
-                // Если на странице существует кнопка лайка c текущим id, то проводим манипуляции с элементами.
-                if (!!like_btn) {
-                    like_btn.classList.add('liked');
-                    counter.classList.remove('not-active');
-                    counter.classList.add('like-active');
-                    let svg = like_btn.querySelector('svg');
-                    let svg_path = svg.querySelector('path');
-                    svg.setAttribute('fill', 'rgb(249, 24, 128)');
-                    svg_path.setAttribute('d', likes_svg.like);
+                /* 
+                Если на странице существуют кнопки лайков c текущим id, то проводим манипуляции с элементами.
+                Как и в случаях ниже, одинаковых кнопок может быть много, потому что на одной странице может быть
+                как оригинальный твит, так и ретвиты.
+                */
+                if (!!like_btns) {
+                    for (let like_btn of like_btns) {
+                        let counter = like_btn.nextElementSibling;
+                        like_btn.classList.add('liked');
+                        counter.classList.remove('not-active');
+                        counter.classList.add('like-active');
+                        let svg = like_btn.querySelector('svg');
+                        let svg_path = svg.querySelector('path');
+                        svg.setAttribute('fill', 'rgb(249, 24, 128)');
+                        svg_path.setAttribute('d', likes_svg.like);
+                    }
                 };
             };
 
             for (let retweeted_id of data.retweets) {
-                let retweet_btn = document.getElementById(`retweet-btn${retweeted_id}`);
-                let counter = document.getElementById(`retweets-count${retweeted_id}`);
+                let retweet_btns = document.querySelectorAll(`#retweet-btn${retweeted_id}`);
 
-                // Если на странице существует кнопка ретвита c текущим id, то проводим манипуляции с элементами.
-                if (!!retweet_btn) {
-                    retweet_btn.classList.add('retweeted');
-                    counter.classList.remove('not-active');
-                    counter.classList.add('retweet-active');
-                    let svg = retweet_btn.querySelector('svg');
-                    let svg_path = svg.querySelector('path');
-                    svg.setAttribute('fill', 'rgb(0, 186, 124)');
-                    svg_path.setAttribute('d', retweets_svg.retweet);
+                // Если на странице существуют кнопки ретвитов c текущим id, то проводим манипуляции с элементами.
+                if (!!retweet_btns) {
+                    for (let retweet_btn of retweet_btns) {
+                        let counter = retweet_btn.nextElementSibling;
+                        retweet_btn.classList.add('retweeted');
+                        counter.classList.remove('not-active');
+                        counter.classList.add('retweet-active');
+                        let svg = retweet_btn.querySelector('svg');
+                        let svg_path = svg.querySelector('path');
+                        svg.setAttribute('fill', 'rgb(0, 186, 124)');
+                        svg_path.setAttribute('d', retweets_svg.retweet);
+                    }
                 };
             };
             
             for (let bookmarked_id of data.bookmarks) {
-                let bookmark_btn = document.getElementById(`bookmark-btn${bookmarked_id}`);
+                let bookmark_btns = document.querySelectorAll(`#bookmark-btn${bookmarked_id}`);
 
-                // Если на странице существует кнопка с закладкой c текущим id, то проводим манипуляции с элементами.
-                if (!!bookmark_btn) {
-                    let btn_text = bookmark_btn.querySelector('.item-text');
-                    bookmark_btn.classList.add('bookmarked');
-                    btn_text.innerHTML = 'Удалить твит из закладок';
+                // Если на странице существуют кнопки с закладкой c текущим id, то проводим манипуляции с элементами.
+                if (!!bookmark_btns) {
+                    for (let bookmark_btn of bookmark_btns) {
+                        let btn_text = bookmark_btn.querySelector('.item-text');
+                        bookmark_btn.classList.add('bookmarked');
+                        btn_text.innerHTML = 'Удалить твит из закладок';
+                    }
                 };
             };
         });

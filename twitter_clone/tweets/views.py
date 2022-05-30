@@ -7,7 +7,7 @@ from django.db.models import Q
 
 from braces.views import JSONResponseMixin
 
-from .models import Tweet
+from .models import Tweet, FIELDS_TO_PREFETCH
 from .forms import TweetForm
 from .utils import TweetActionsMixin
 from utils.mixins import DataMixin, SimpleLoginRequiredAjaxMixin
@@ -22,13 +22,15 @@ class DetailtTweetView(DataMixin, SingleObjectMixin, ListView):
         # Берем username из URL и проверяем, существует ли вообще такой пользователь, если нет, то выкидываем 404 ошибку.
         # Если такой пользователь существует, то поиск объекта происходит среди всех твитов, оставленных им.
         # Если у данного пользователь нет твита с запрашиваемым id, то выкидываем 404 ошибку.
-        user = get_object_or_404(CustomUser, username=self.kwargs['username'])
-        self.object = self.get_object(queryset=user.tweets.all().select_related('user'))
+        self.user = get_object_or_404(CustomUser, username=self.kwargs['username'])
+        self.object = self.get_object(queryset=self.user.tweets.all())
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['detail_tweet'] = self.object
+        context['detail_tweet_descendants'] = self.object.get_descendants(include_self=True)
+        context['title'] = f'{self.user.profile_name} в Твиттере: "{self.object.text}"'
         return context
 
     def get_queryset(self):
@@ -37,12 +39,12 @@ class DetailtTweetView(DataMixin, SingleObjectMixin, ListView):
         ancestors = Tweet.objects.filter(
             Q(lft__lte=self.object.lft) & Q(rght__gte=self.object.rght),
             tree_id=self.object.tree_id
-        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+        ).select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
         childrens = Tweet.objects.filter(
             Q(lft__gt=self.object.lft) & Q(rght__lt=self.object.rght),
             level=self.object.level+1,
             tree_id=self.object.tree_id
-        ).select_related('user').prefetch_related('likes', 'retweets', 'children', 'mentioned_users', 'related_tags')
+        ).select_related('user').prefetch_related(*FIELDS_TO_PREFETCH)
         return ancestors.union(childrens).order_by('lft')
 
 class MakeTweetView(BaseCreateView):

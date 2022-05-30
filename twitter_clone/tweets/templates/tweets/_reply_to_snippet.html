@@ -1,0 +1,33 @@
+{% load main_template_utils %}
+{% load tweets_template_utils %}
+
+{% if users %}
+    <div class="reply-to">
+        <span class="replying-to">В ответ</span>
+        {% if users|length <= 2 %}
+            {% for user in users %}
+                <a href="{{ user.get_absolute_url }}" class="reply-link">{{ user.username|at }}</a>
+            {% endfor %}
+        {% endif %}
+        {% if users|length == 3 %}
+            {% for user in users %}
+                {% if forloop.last %}
+                    <span class="reply-and">и</span>
+                    <a href="{{ user.get_absolute_url }}" class="reply-link">{{ user.username|at }}</a>
+                {% else %}
+                    <a href="{{ user.get_absolute_url }}" class="reply-link">{{ user.username|at }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if users|length > 3 %}
+            {% for user in users|slice:":2" %}
+                <a href="{{ user.get_absolute_url }}" class="reply-link">{{ user.username|at }}</a>
+            {% endfor %}
+            <span class="reply-and">и</span>
+            <a href="" class="participants reply-link" id="participants{{ tweet_id }}" data-bs-toggle="modal" data-bs-target="#ParticipantsModal{{ tweet_id }}">
+                еще {{ users|length|add:"-2" }} пользователям
+            </a>
+            {% render_users_modal id="ParticipantsModal"|add:tweet_id title="Участники переписки" users=users current_user=current_user %}
+        {% endif %}
+    </div>
+{% endif %}
