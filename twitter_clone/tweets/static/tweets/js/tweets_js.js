@@ -376,9 +376,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!!like_btns) {
                     for (let like_btn of like_btns) {
                         let counter = like_btn.nextElementSibling;
+                        if (!!counter) {
+                            counter.classList.remove('not-active');
+                            counter.classList.add('like-active');
+                        }
                         like_btn.classList.add('liked');
-                        counter.classList.remove('not-active');
-                        counter.classList.add('like-active');
                         let svg = like_btn.querySelector('svg');
                         let svg_path = svg.querySelector('path');
                         svg.setAttribute('fill', 'rgb(249, 24, 128)');
@@ -394,9 +396,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!!retweet_btns) {
                     for (let retweet_btn of retweet_btns) {
                         let counter = retweet_btn.nextElementSibling;
+                        if (!!counter) {
+                            counter.classList.remove('not-active');
+                            counter.classList.add('retweet-active');
+                        }
                         retweet_btn.classList.add('retweeted');
-                        counter.classList.remove('not-active');
-                        counter.classList.add('retweet-active');
                         let svg = retweet_btn.querySelector('svg');
                         let svg_path = svg.querySelector('path');
                         svg.setAttribute('fill', 'rgb(0, 186, 124)');

@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 
+from main_app.views import Error404View, Error505View
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('authorization.urls')),
@@ -32,3 +34,6 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = Error404View.as_view()
+handler505 = Error505View.as_view()

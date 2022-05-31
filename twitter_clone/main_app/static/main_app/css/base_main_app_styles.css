@@ -97,3 +97,10 @@
     border-radius: 16px;
     border-width: 1px;
 }
+
+/* ERROR PAGES */
+
+.message-404,
+.message-505 {
+    color: rgb(83, 100, 113);
+}

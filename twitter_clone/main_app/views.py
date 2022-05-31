@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.db.models import Q, F, Value, BigIntegerField
 
 from tweets.models import Tweet, FIELDS_TO_PREFETCH
@@ -34,3 +34,11 @@ class HomeView(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
         return context
+
+class Error404View(DataMixin, TemplateView):
+
+    template_name = 'main_app/404.html'
+
+class Error505View(DataMixin, TemplateView):
+
+    template_name = 'main_app/505.html'
