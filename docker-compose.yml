@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14.3-alpine
+    container_name: twitter_clone_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=twitter_clone
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+  web:
+    build: .
+    container_name: twitter_clone
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - "8000:8000"
+    environment:
+      - SQL_NAME=twitter_clone
+      - SQL_USER=postgres
+      - SQL_PASSWORD=password
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
